@@ -39,6 +39,7 @@ async function registerUser(req, res) {
 /* 
   Login user and generate JWT token
 */
+
 async function loginUser(request, reply) {
   const dataLogin = request.body;
 

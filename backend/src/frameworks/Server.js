@@ -7,7 +7,13 @@ const server = express();
 // Render fornece a porta pelo environment variable PORT
 const PORT = process.env.PORT || 4000; // 4000 só se estiver rodando localmente
 
-server.use(cors());
+// ✅ Configura o CORS para aceitar apenas seu front-end
+server.use(cors({
+  origin: ["https://amigopet-d0856.web.app"],
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  credentials: true
+}));
+
 server.use(express.json()); // Essencial para req.body funcionar
 server.use(routes);
 
