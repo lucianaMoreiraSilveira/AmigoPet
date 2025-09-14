@@ -52,11 +52,13 @@ async function loginUser(request, reply) {
   }
 
   const payload = {
-    quer_adotar: replyService.quer_adotar,
-    quer_divulgar: replyService.quer_divulgar,
-     userId: replyService.user.id,
-    userRole: replyService.user.role,
-  };
+    id: user.id,
+    email: user.email,
+    role: user.role,
+    quer_adotar: user.quer_adotar,
+    quer_divulgar: user.quer_divulgar
+};
+
 
   const token = jwt.sign(payload, process.env.SECRET_KEY, { expiresIn: "5m" });
 
