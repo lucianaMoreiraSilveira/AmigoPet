@@ -1,0 +1,153 @@
+  .body {
+    background-color: #f3fdf6;
+    font-family: 'Segoe UI', sans-serif;
+  }
+
+  .navbar {
+    background-color: #d0f0d8 !important;
+  }
+
+  .navbar .nav-link {
+    transition: color 0.3s;
+  }
+
+  .navbar .nav-link:hover {
+    color: #207a4b !important;
+  }
+
+  .btn-primary {
+    background-color: #65c18c;
+    border-color: #5dbb82;
+  }
+
+  .btn-primary:hover {
+    background-color: #4bb174;
+    border-color: #48a768;
+  }
+
+  .btn-success {
+    background-color: #6dcf9e;
+    border-color: #63c993;
+  }
+
+  .btn-success:hover {
+    background-color: #4ebc81;
+    border-color: #46ae75;
+  }
+
+  .btn-danger {
+    background-color: #ffb3b3;
+    border-color: #ffa3a3;
+  }
+
+  .btn-danger:hover {
+    background-color: #ff8080;
+    border-color: #ff6b6b;
+  }
+
+  .form-control,
+  .form-select {
+    border-radius: 10px;
+    box-shadow: none;
+  }
+
+  h2 {
+    color: #2e8b57;
+    font-weight: 600;
+  }
+
+  .user-card,
+  .pet-card {
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    background-color: #ffffff;
+    padding: 20px;
+  }
+
+  .pet-card img {
+    height: 200px;
+    object-fit: cover;
+    border-radius: 12px 12px 0 0;
+  }
+
+  .pet-card .card-body {
+    padding: 1rem;
+  }
+
+  .footer {
+    background-color: #e2f6e9;
+    color: #333;
+  }
+
+  .footer a {
+    color: #207a4b;
+    text-decoration: none;
+  }
+
+  .footer a:hover {
+    text-decoration: underline;
+  }
+
+  .col-custom-5 {
+    width: 20%;
+    padding: 10px;
+  }
+
+  @media (max-width: 992px) {
+    .col-custom-5 {
+      width: 50%;
+    }
+  }
+
+  @media (max-width: 576px) {
+    .col-custom-5 {
+      width: 100%;
+    }
+  }
+  .pet-card,
+.user-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.pet-card:hover,
+.user-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+}
+ .footer { 
+  background-color: #d0f0d8 !important;
+  color: #207a4b !important;
+  transition: color 0.3s;
+}
+  body {
+    padding-top: 80px; /* ajuste conforme a altura real do seu menu */
+  }
+
+
+   /* Estilo geral dos cards */
+  .card-custom {
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    padding: 20px;
+    margin-bottom: 30px;
+  }
+
+  /* Cores diferentes para cada card */
+  .card-user { background-color: #e3f2fd; }       /* azul claro */
+  .card-volunteer { background-color: #e8f5e9; }  /* verde claro */
+  .card-pet { background-color: #fff3e0; }        /* laranja claro */
+  .card-news { background-color: #fce4ec; }       /* rosa claro */
+
+  h2 { margin-bottom: 20px; }
+
+  /* Cards para resultados individuais */
+  .result-card {
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    padding: 15px;
+    margin-bottom: 15px;
+    transition: transform 0.2s;
+  }
+  .result-card:hover {
+    transform: scale(1.02);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+  }

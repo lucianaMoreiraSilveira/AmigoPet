@@ -1,0 +1,104 @@
+/* 🌈 Fundo geral */
+body {
+  background: linear-gradient(135deg, #fceabb, #f8b500, #ff6f61, #ffcc70);
+  background-size: 300% 300%;
+  animation: gradientBG 12s ease infinite;
+  font-family: "Poppins", sans-serif;
+  padding-top: 90px; /* evita que o conteúdo grude na navbar */
+}
+
+@keyframes gradientBG {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Navbar */
+.navbar {
+  background: linear-gradient(90deg, #7afcff, #ff65a3, #ff7eb9);
+  border-radius: 0 0 20px 20px;
+}
+.nav-link {
+  transition: all 0.3s ease;
+}
+.nav-link:hover {
+  color: #fff !important;
+  transform: scale(1.05);
+}
+
+/* 🎴 Cards do carrinho */
+#cartItems .card {
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+  transition: transform 0.3s, box-shadow 0.3s;
+  background: #fff;
+}
+#cartItems .card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 25px rgba(0,0,0,0.25);
+}
+
+#cartItems .card img {
+  height: 200px;
+  object-fit: cover;
+  border-bottom: 5px solid #ff6f61;
+}
+
+/* Botões */
+.btn {
+  border-radius: 25px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+.btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+}
+
+/* 🐾 Texto principal */
+h2 {
+  text-align: center;
+  font-size: 1.8rem;
+  background: linear-gradient(90deg, #ff6f61, #ffcc70);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Contador de pets */
+#cartCount {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #ff6f61;
+}
+
+/* 🛠️ Modais */
+.modal-content {
+  border-radius: 20px;
+  background: #fdfdfd;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+.modal-header {
+  border-bottom: none;
+  background: linear-gradient(90deg, #ff9a9e, #fad0c4);
+  border-radius: 20px 20px 0 0;
+}
+.modal-body p {
+  margin-bottom: 8px;
+}
+
+/* Footer */
+.footer {
+  background: linear-gradient(90deg, #ff9a9e, #fad0c4, #fad0c4);
+  border-radius: 20px 20px 0 0;
+  padding: 2rem 0;
+}
+.footer h5 {
+  color: #333;
+}
+.footer a {
+  transition: transform 0.3s ease;
+}
+.footer a:hover {
+  transform: scale(1.2);
+}

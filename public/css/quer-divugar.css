@@ -1,0 +1,105 @@
+body.fundo {
+  background: linear-gradient(135deg, #fceabb, #f8b500, #ff6f61, #ffcc70);
+  background-size: 300% 300%;
+  animation: gradientBG 10s ease infinite;
+}
+
+/* Animação do fundo */
+@keyframes gradientBG {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Navbar */
+
+/* 🌟 Navbar */
+.navbar {
+  background: linear-gradient(90deg, #ff7eb9, #ff65a3, #7afcff);
+  border-radius: 0 0 20px 20px;
+}
+
+.nav-link {
+  transition: all 0.3s ease;
+}
+.nav-link:hover {
+  color: #fff !important;
+  transform: scale(1.1);
+}
+
+
+.btn-primary {
+    background: linear-gradient(90deg, #ff6b6b, #f7d794);
+    border: none;
+    transition: transform 0.3s ease;
+}
+.btn-primary:hover {
+    transform: scale(1.05);
+}
+
+/* Main container */
+main {
+    padding: 5rem 1rem 2rem;
+    flex-grow: 1;
+}
+
+/* Form styling */
+form {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    transition: transform 0.3s ease;
+}
+form:hover {
+    transform: translateY(-5px);
+}
+h2, h5 {
+    color: #ff6b6b;
+}
+
+/* Inputs e selects */
+input.form-control, select.form-control, textarea.form-control {
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    transition: all 0.3s ease;
+}
+input.form-control:focus, select.form-control:focus, textarea.form-control:focus {
+    border-color: #ff6b6b;
+    box-shadow: 0 0 10px rgba(255,107,107,0.3);
+}
+
+/* Checkboxes */
+.form-check-input:checked {
+    background-color: #ff6b6b;
+    border-color: #ff6b6b;
+}
+
+/* Footer */
+footer {
+    background: rgba(255,255,255,0.9);
+    padding: 2rem 0;
+    box-shadow: 0 -4px 10px rgba(0,0,0,0.05);
+}
+
+/* Hover effects icons sociais */
+footer a:hover {
+    transform: scale(1.2);
+    transition: 0.3s;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    form {
+        padding: 1rem;
+    }
+}
+.col-md-6 .p-3 {
+  border-radius: 12px;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+}
+
+.col-md-6 .p-3 h5 {
+  font-weight: bold;
+  margin-bottom: 10px;
+}
