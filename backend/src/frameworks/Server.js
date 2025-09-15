@@ -5,7 +5,7 @@ const routes = require("./Routes");
 const server = express();
 
 // Render fornece a porta pelo environment variable PORT
-const PORT = process.env.PORT || 4000; // 4000 só se estiver rodando localmente
+const PORT = process.env.PORT || 3000; // 4000 só se estiver rodando localmente
 
 // ✅ Configura o CORS para aceitar apenas seu front-end
 server.use(cors({
