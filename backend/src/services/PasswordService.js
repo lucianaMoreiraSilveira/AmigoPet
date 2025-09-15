@@ -15,21 +15,21 @@ class PasswordService {
       }
     });
   }
-
   async authenticateUser(email, password) {
     const user = await this.userRepository.findByEmail(email);
 
     if (!user || user.error) {
-      throw new Error("Usuário não encontrado");
+      throw new Error('Usuário não encontrado');
     }
 
     const passwordMatch = await bcrypt.compare(password, user.password);
     if (!passwordMatch) {
-      throw new Error("Senha incorreta");
+      throw new Error('Senha incorreta');
     }
 
     return user;
   }
+
 
   async requestPasswordReset(email) {
     const user = await this.userRepository.findByEmail(email);
@@ -37,22 +37,19 @@ class PasswordService {
 
     const token = uuidv4();
     user.reset_token = token;
-    user.reset_token_expires = new Date(Date.now() + 60 * 60 * 1000); // 1h
+    user.reset_token_expires = new Date(Date.now() + 60 * 60 * 1000); // 1 hora
 
     await this.userRepository.updateUser(user);
 
-    // 🔗 Link apontando para o Firebase Hosting (frontend)
-    const resetUrl = `https://amigopet-5fc87.web.app/resetPassword.html?token=${token}`;
+    const resetUrl = `http://localhost:8080/reset?token=${token}`;
 
     await this.transporter.sendMail({
       from: process.env.EMAIL_USER,
       to: email,
-      subject: "Redefinição de senha - AmigoPet",
-      html: `
-        <p>Você solicitou a redefinição de senha.</p>
-        <p>Clique no link abaixo para redefinir sua senha (válido por 1 hora):</p>
-        <a href="${resetUrl}">${resetUrl}</a>
-      `
+      subject: "Redefinição de senha",
+      html: `<p>Você solicitou a redefinição de senha.</p>
+             <p>Clique no link abaixo para redefinir:</p>
+             <a href="${resetUrl}">${resetUrl}</a>`
     });
 
     console.log(`E-mail de redefinição enviado para ${email}`);
@@ -70,5 +67,7 @@ class PasswordService {
     await this.userRepository.updateUser(user);
   }
 }
+
+
 
 module.exports = PasswordService;
