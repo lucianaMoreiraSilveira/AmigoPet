@@ -1,32 +1,32 @@
 const express = require("express");
 const cors = require("cors");
-const routes = require("./Routes");
 
 const server = express();
 
-// Render fornece a porta pelo environment variable PORT
-const PORT = process.env.PORT || 3000; // 4000 só se estiver rodando localmente
-
-// ✅ Configura o CORS para aceitar apenas seu front-end
 server.use(cors({
   origin: ["https://amigopet-d0856.web.app"],
   methods: ["GET", "POST", "PUT", "DELETE"],
   credentials: true
 }));
 
-server.use(express.json()); // Essencial para req.body funcionar
+server.use(express.json());
+
+// Rota de teste SECRET_KEY
+server.get("/test-secret", (req, res) => {
+  if (process.env.SECRET_KEY) {
+    res.json({ message: "SECRET_KEY está definida!", secret: process.env.SECRET_KEY });
+  } else {
+    res.status(500).json({ message: "SECRET_KEY NÃO está definida!" });
+  }
+});
+
+// Suas rotas principais
+const routes = require("./Routes");
 server.use(routes);
 
 server.get("/", (req, res) => {
   res.send("🚀 AmigoPet API está rodando!");
 });
 
-server.listen(PORT, () => {
-  console.log(`Server ON! Listening on port ${PORT}`);
-});
-
-
-
-
-
-
+const PORT = process.env.PORT || 3000;
+server.listen(PORT, () => console.log(`Server ON! Listening on port ${PORT}`));
