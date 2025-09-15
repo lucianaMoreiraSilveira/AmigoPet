@@ -5,7 +5,6 @@ const PasswordController = {
   async requestReset(req, res) {
     try {
       const { email } = req.body;
-
       if (!email) {
         return res.status(400).json({ error: "O campo 'email' é obrigatório" });
       }
@@ -20,7 +19,6 @@ const PasswordController = {
   async resetPassword(req, res) {
     try {
       const { password } = req.body;
-
       if (!password) {
         return res.status(400).json({ error: "A nova senha é obrigatória" });
       }
