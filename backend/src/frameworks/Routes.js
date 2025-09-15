@@ -56,6 +56,12 @@ routes.get('/volunteers/:id/all', VolunteersController.getVolunteersWithAllData)
 
 
 /*redefinir senha*/
+
+// rota pública para solicitar reset de senha
+routes.post("/request-reset", PasswordController.requestReset);
+
+// rota pública para redefinir a senha
+routes.post("/reset-password", PasswordController.resetPassword);
 routes.post("/forgot", PasswordController.requestReset);
 routes.post("/reset", PasswordController.resetPassword);
 
