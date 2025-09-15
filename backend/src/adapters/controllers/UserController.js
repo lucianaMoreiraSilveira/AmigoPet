@@ -51,7 +51,9 @@ async function loginUser(request, reply) {
     return reply.status(replyService.code || 500).json({ error: replyService.error });
   }
 
-  const payload = {
+  const { user } = replyService;
+
+const payload = {
     id: user.id,
     email: user.email,
     role: user.role,
@@ -60,12 +62,13 @@ async function loginUser(request, reply) {
 };
 
 
+
   const token = jwt.sign(payload, process.env.SECRET_KEY, { expiresIn: "5m" });
 
   // Verifique se o token foi gerado corretamente
-  if (!token) {
-    return reply.status(500).json({ error: "Erro ao gerar o token." });
-  }
+  if (!process.env.SECRET_KEY) {
+  console.warn("⚠️ SECRET_KEY não definido, usando chave temporária!");
+}
 
  let redirect = "";
 

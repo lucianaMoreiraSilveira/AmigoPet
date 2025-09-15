@@ -24,18 +24,18 @@ class UserService {
 
 
    async authenticateUser({ email, password }) {
-    const user = await this.userRepository.findByEmail(email);
+   const user = await this.userRepository.findByEmail(email);
 
-    if (!user) {
-        return { error: "Usuário não encontrado", code: 404 };
-    }
+if (!user) {
+    return { error: "Usuário não encontrado", code: 404 };
+}
 
-    const isPasswordValid = await bcryptjs.compare(password, user.password);
-    if (!isPasswordValid) {
-        return { error: "Senha incorreta", code: 401 };
-    }
+const isPasswordValid = await bcryptjs.compare(password, user.password);
+if (!isPasswordValid) {
+    return { error: "Senha incorreta", code: 401 };
+}
 
-    return { user };
+return { user };
 }
 
 
