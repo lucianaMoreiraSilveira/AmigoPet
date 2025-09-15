@@ -1,9 +1,12 @@
-function Authorize(roleAccess) {
-  return (request, reply, nextStage) => {
-    if (request.user.userRole != roleAccess)
-      return reply.status(403).json({ error: "Access Denied" });
+// Authorize.js
 
-    nextStage();
+function Authorize(roleAccess) {
+  return (req, res, next) => {
+    // req.user precisa existir (provido pelo Authenticate)
+    if (!req.user || req.user.role !== roleAccess) {
+      return res.status(403).json({ error: "Access Denied" });
+    }
+    next();
   };
 }
 
