@@ -3,7 +3,7 @@ const supabase = require("../frameworks/supabaseClient");
 class PasswordService {
   async requestPasswordReset(email) {
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: "http://localhost:3000/reset-password" // coloque a URL da sua tela de reset
+      redirectTo: "https://amigopet.onrender.com/reset-password" // coloque a URL da sua tela de reset
     });
 
     if (error) {
