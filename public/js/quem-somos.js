@@ -6,7 +6,7 @@ document.getElementById('volunteerForm').addEventListener('submit', async functi
       const formMessage = document.getElementById('formMessage');
 
       try {
-        const res = await fetch('http://localhost:8080/volunteers/register', {
+        const res = await fetch('https://amigopet.onrender.com/register', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ name, email, role })

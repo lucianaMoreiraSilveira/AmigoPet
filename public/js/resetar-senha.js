@@ -11,13 +11,13 @@ document.getElementById('resetPasswordForm').addEventListener('submit', async fu
     }
 
     try {
-      const response = await fetch('https://amigopet-1.onrender.com/reset', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ token, password: newPassword }), // <- ALTERADO AQUI
-      });
+      const newPassword = document.getElementById('newPassword').value.trim();
+
+const response = await fetch('https://amigopet.onrender.com/reset-password', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({ password: newPassword }),
+});
 
       const data = await response.json();
 

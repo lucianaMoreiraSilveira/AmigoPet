@@ -58,7 +58,7 @@ async function registerPet() {
   };
 
   try {
-    const response = await fetch("https://amigopet-1.onrender.com/pet/register", {
+    const response = await fetch("https://amigopet.onrender.com/pet/register", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(petData),
@@ -91,7 +91,7 @@ document.addEventListener("DOMContentLoaded", () => {
       await registerPet();
     });
   } else {
-    console.warn("Formulário #registerpetForm não encontrado.");
+    console.warn("Formulário #registerpetForm não encontradofirebad.");
   }
 });
 

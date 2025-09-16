@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     try {
-      const response = await fetch("https://amigopet-1.onrender.com/search", {
+      const response = await fetch("https://amigopet.onrender.com/search", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(petData)
@@ -91,7 +91,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   window.marcarAdotado = async function(petId, nome) {
     try {
-      const response = await fetch(`https://amigopet-1.onrender.com/pet/${petId}/adotar`, {
+      const response = await fetch(`https://amigopet.onrender.com/pet/${petId}/adotar`, {
         method: "PUT"
       });
 
@@ -119,10 +119,10 @@ document.getElementById('searchUserForm').addEventListener('submit', async funct
     let res;
     if (id) {
       // busca por ID
-      res = await fetch(`https://amigopet-1.onrender.com/user/${id}/all`);
+      res = await fetch(`https://amigopet.onrender.com/user/${id}/all`);
     } else if (name) {
       // busca por nome
-      res = await fetch("https://amigopet-1.onrender.com/user/search", {
+      res = await fetch("https://amigopet.onrender.com/user/search", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ nome: name })
@@ -184,7 +184,7 @@ document.getElementById('searchUserForm').addEventListener('submit', async funct
     }
 
     try {
-      const res = await fetch(`https://amigopet-1.onrender.com/user/${id}`, {
+      const res = await fetch(`https://amigopet.onrender.com/user/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ nome, email, whatsapp })
@@ -206,7 +206,7 @@ document.getElementById('searchUserForm').addEventListener('submit', async funct
     if (!confirm("Tem certeza que deseja deletar este usuário?")) return;
 
     try {
-      const res = await fetch(`https://amigopet-1.onrender.com/user/${id}`, { method: 'DELETE' });
+      const res = await fetch(`https://amigopet.onrender.com/user/${id}`, { method: 'DELETE' });
 
       if (res.ok) {
         alert('Usuário deletado com sucesso!');
@@ -229,7 +229,7 @@ document.getElementById('searchPetByIdForm').addEventListener('submit', async fu
   container.innerHTML = '';
 
   try {
-    const res = await fetch(`https://amigopet-1.onrender.com/pet/${id}/all`);
+    const res = await fetch(`https://amigopet.onrender.com/pet/${id}/all`);
     if (!res.ok) throw new Error('Pet não encontrado');
     const pet = await res.json();
 
@@ -276,7 +276,7 @@ window.editarPet = async function(id, btn) {
   }
 
   try {
-    const res = await fetch(`https://amigopet-1.onrender.com/pet/${id}`, {
+    const res = await fetch(`https://amigopet.onrender.com/pet/${id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ name, avatar })
@@ -298,7 +298,7 @@ window.deletarPet = async function(id) {
   if (!confirm("Tem certeza que deseja deletar este pet?")) return;
 
   try {
-    const res = await fetch(`https://amigopet-1.onrender.com/pet/${id}`, { method: 'DELETE' });
+    const res = await fetch(`https://amigopet.onrender.com/pet/${id}`, { method: 'DELETE' });
 
     if (res.ok) {
       alert('Pet deletado com sucesso!');
@@ -330,7 +330,7 @@ document.getElementById('searchVolunteersForm').addEventListener('submit', async
   }
 
   try {
-    const res = await fetch(`https://amigopet-1.onrender.com/volunteers/${id}/all`);
+    const res = await fetch(`https://amigopet.onrender.com/volunteers/${id}/all`);
     if (!res.ok) throw new Error('Voluntário não encontrado');
     const volunteer = await res.json();
     displayVolunteer(volunteer);
@@ -386,7 +386,7 @@ window.editVolunteer = async function(id, btn) {
   }
 
   try {
-    const res = await fetch(`https://amigopet-1.onrender.com/volunteers/${id}`, {
+    const res = await fetch(`https://amigopet.onrender.com/volunteers/${id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ name, email, role })
@@ -409,7 +409,7 @@ window.deleteVolunteer = async function(id) {
   if (!confirm("Tem certeza que deseja deletar este voluntário?")) return;
 
   try {
-    const res = await fetch(`https://amigopet-1.onrender.com/volunteers/${id}`, { method: 'DELETE' });
+    const res = await fetch(`https://amigopet.onrender.com/volunteers/${id}`, { method: 'DELETE' });
 
     if (res.ok) {
       alert('Voluntário deletado com sucesso!');
@@ -435,7 +435,7 @@ document.getElementById("newsForm").addEventListener("submit", async function (e
   console.log("Dados que vão pro back:", { titulo, imagem, descricao, link });
 
   try {
-    const response = await fetch("https://amigopet-1.onrender.com/noticias/register", {
+    const response = await fetch("https://amigopet.onrender.com/noticias/register", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ titulo, imagem, descricao, link })

@@ -16,7 +16,7 @@ async function register() {
   };
 
   try {
-    const reply = await fetch("https://amigopet-1.onrender.com/user/register", {
+    const reply = await fetch("https://amigopet.onrender.com/user/register", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(dataLogin),

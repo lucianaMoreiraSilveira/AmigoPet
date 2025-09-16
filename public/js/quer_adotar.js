@@ -25,7 +25,7 @@ async function carregarPets() {
   const container = document.getElementById('pets-container');
 
   try {
-    const response = await fetch('https://amigopet-1.onrender.com/pet/all');
+    const response = await fetch('https://amigopet.onrender.com/pet/all');
     if (!response.ok) throw new Error(`HTTP ${response.status} - ${response.statusText}`);
 
     const data = await response.json();
@@ -59,13 +59,10 @@ cardInner.innerHTML = `
     <img src="${imagePath}" class="card-img-top" alt="${pet.name}" style="height: 150px; object-fit: contain; background-color: #fefefe;">
     <div class="card-body d-flex flex-column justify-content-between">
       <h5 class="card-title">${pet.name}</h5>
-       <p class="card-text">
-          Espécie: ${specieMap[pet.specie] || pet.specie}<br>
-          Sexo: ${sexMap[pet.sex] || pet.sex}<br>
-          Idade: ${pet.age} anos<br>
-          Porte: ${sizeMap[pet.size] || pet.size}
-        </p>
-        <div class="mt-auto text-center">
+      <p class="card-text text-muted">
+        ${specie} • ${sex} • ${pet.age} anos • ${size}
+      </p>
+      <p class="card-text">${pet.description || ''}</p>
     </div>
     <div class="card-footer text-muted text-center">
       ${pet.city_id}, ${pet.state_id}
@@ -134,7 +131,7 @@ Object.keys(rawData).forEach(key => {
 // Adiciona filtro fixo para pets NÃO adotados
 petData.adotado = false;
   try {
-    const response = await fetch("https://amigopet-1.onrender.com/search", {
+    const response = await fetch("https://amigopet.onrender.com/search", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -279,58 +276,53 @@ function displayResults(pets) {
 
 // ===== PÁGINA DE DETALHE DO PET =====
 
-function displayResults(pets) {
-  const container = document.getElementById("petResults");
-  container.innerHTML = "";
+document.addEventListener("DOMContentLoaded", function () {
+  const container = document.getElementById("pet-detalhes");
+  const petData = localStorage.getItem("petSelecionado");
 
-  if (!pets || pets.length === 0) {
-    container.innerHTML = "<div class='col-12 text-center text-muted'>Nenhum pet encontrado.</div>";
+  if (!petData) {
+    container.innerHTML = "<p class='text-danger'>Nenhum pet selecionado.</p>";
     return;
   }
 
-  const specieMap = { G: 'Gato', C: 'Cachorro' };
-  const sexMap = { M: 'Macho', F: 'Fêmea' };
-  const sizeMap = { P: 'Pequeno', M: 'Médio', G: 'Grande' };
+  const pet = JSON.parse(petData);
 
-  pets.forEach(pet => {
-    const col = document.createElement("div");
-    col.className = "col-custom-5 d-flex align-items-stretch";
+  const specieMap = { G: "Gato", C: "Cachorro" };
+  const sexMap = { M: "Macho", F: "Fêmea" };
+  const sizeMap = { P: "Pequeno", M: "Médio", G: "Grande" };
 
-    const card = document.createElement("div");
-    card.className = "card pet-card";
+  const imagePath = pet.avatar
+    ? `images/${pet.avatar.split("\\").pop()}`
+    : "imgs/pet-placeholder.jpg";
 
-    const avatarFilename = pet.avatar ? pet.avatar.split('\\').pop() : null;
-    const imagePath = avatarFilename ? `images/${avatarFilename}` : 'imgs/pet-placeholder.jpg';
-
-    card.innerHTML = `
-      <img src="${imagePath}" class="card-img-top" alt="${pet.name}" style="height: 150px; width: 100%; object-fit: contain;">
-      <div class="card-body d-flex flex-column justify-content-between">
-        <h5 class="card-title">${pet.name}</h5>
-        <p class="card-text">
-          Espécie: ${specieMap[pet.specie] || pet.specie}<br>
-          Sexo: ${sexMap[pet.sex] || pet.sex}<br>
-          Idade: ${pet.age} anos<br>
-          Porte: ${sizeMap[pet.size] || pet.size}
-        </p>
-        <div class="mt-auto text-center">
-          <button class="btn btn-success add-to-cart"
-            data-id="${pet.id}"
-            data-name="${pet.name}"
-            data-image="${imagePath}"
-            data-specie="${pet.specie}"
-            data-sex="${pet.sex}"
-            data-age="${pet.age}"
-            data-size="${pet.size}">
-            Colocar na Cestinha
-          </button>
+  container.innerHTML = `
+    <div class="row justify-content-center">
+      <div class="col-md-4">
+        <div class="card h-100 shadow-sm rounded">
+          <img src="${imagePath}" class="card-img-top" alt="${pet.name}">
+          <div class="card-body d-flex flex-column">
+            <h5 class="card-title">${pet.name}</h5>
+            <p class="card-text">
+              ${specieMap[pet.specie]} • ${sexMap[pet.sex]} • ${pet.age} anos • ${sizeMap[pet.size]}
+            </p>
+            <p class="text-muted">${pet.description || ""}</p>
+            <button class="btn btn-success mt-auto add-to-cart"
+              data-id="${pet.id}"
+              data-name="${pet.name}"
+              data-image="${imagePath}"
+              data-specie="${pet.specie}"
+              data-sex="${pet.sex}"
+              data-age="${pet.age}"
+              data-size="${pet.size}">
+              Adicionar à cestinha
+            </button>
+          </div>
         </div>
       </div>
-    `;
+    </div>
+  `;
+});
 
-    col.appendChild(card);
-    container.appendChild(col);
-  });
-}
 //menu tempo do token
 
 function isTokenValid(token) {
@@ -416,91 +408,4 @@ document.addEventListener('DOMContentLoaded', () => {
     // Redireciona
    window.location.href = "login.html";
   });
-});
-
-
-
-    // Função de busca de pets
-    document.getElementById('searchForm').addEventListener('submit', async function (e) {
-      e.preventDefault();
-
-      const petName = document.getElementById('pet_name').value;
-      const petSpecie = document.getElementById('pet_specie').value;
-      const petSex = document.getElementById('pet_sex').value;
-      const petAge = document.getElementById('pet_age').value;
-      const petSize = document.getElementById('pet_size').value;
-
-      // Aqui você pode enviar a requisição para o servidor
-      // Exemplo de resposta fictícia para teste
-      const response = {
-        pets: [
-          {
-            id: 1,
-            name: 'Rex',
-            specie: 'Cachorro',
-            sex: 'Macho',
-            age: 3,
-            size: 'Médio',
-            image: 'https://placeimg.com/300/200/animals',
-          },
-          {
-            id: 2,
-            name: 'Mia',
-            specie: 'Gato',
-            sex: 'Fêmea',
-            age: 2,
-            size: 'Pequeno',
-            image: 'https://placeimg.com/300/200/animals',
-          },
-        ],
-      };
-
-      // Exibir os resultados
-      const petResults = document.getElementById('petResults');
-      petResults.innerHTML = ''; // Limpar resultados anteriores
-      response.pets.forEach(pet => {
-        const petDiv = document.createElement('div');
-        petDiv.classList.add('col-md-4', 'mb-4');
-        petDiv.innerHTML = `
-          <div class="card">
-            <img src="${pet.image}" class="card-img-top" alt="${pet.name}">
-            <div class="card-body">
-              <h5 class="card-title">${pet.name}</h5>
-              <p class="card-text">Espécie: ${pet.specie}<br>Sexo: ${pet.sex}<br>Idade: ${pet.age}<br>Porte: ${pet.size}</p>
-              <button class="btn btn-success" onclick="addToCart(${pet.id})">Adicionar ao Carrinho</button>
-            </div>
-          </div>
-        `;
-        petResults.appendChild(petDiv);
-      });
-    });
-
-    
-// 5. Clique adicionar ao carrinho
-// ==========================
-document.addEventListener("click", function (e) {
-  if (e.target && e.target.classList.contains("add-to-cart")) {
-    const button = e.target;
-
-    const pet = {
-      id: parseInt(button.dataset.id),
-      name: button.dataset.name,
-      image: button.dataset.image,
-      especie: specieMap[button.dataset.specie] || button.dataset.specie,
-      sexo: sexMap[button.dataset.sex] || button.dataset.sex,
-      idade: button.dataset.age,
-      porte: sizeMap[button.dataset.size] || button.dataset.size,
-    };
-
-    let cart = getCart();
-
-    if (!cart.some((p) => p.id === pet.id)) {
-      cart.push(pet);
-      setCart(cart);
-      updateCartCount();
-      alert(`${pet.name} foi adicionado na cestinha.`);
-    } else {
-      alert(`${pet.name} já está na cestinha.`);
-    }
-  }
 });

@@ -113,7 +113,7 @@ function carregarNoticias() {
 //noticias
 async function carregarNoticias() {
   try {
-    const response = await fetch("https://amigopet-1.onrender.com/noticias/all");
+    const response = await fetch("https://amigopet.onrender.com/noticias/all");
     if (!response.ok) throw new Error("Falha ao buscar notícias");
 
     const data = await response.json();
@@ -131,7 +131,7 @@ async function carregarNoticias() {
       const ativo = index === 0 ? "active" : "";
       carousel.innerHTML += `
         <div class="carousel-item ${ativo}">
-          <img src="${noticia.imagem || "https://amigopet-1.onrender.com/600x400"}" 
+          <img src="${noticia.imagem || "https://amigopet.onrender.com/600x400"}" 
                class="d-block w-100" 
                alt="${noticia.titulo}">
           <div class="carousel-caption d-none d-md-block bg-dark bg-opacity-50 rounded p-2">
@@ -158,7 +158,7 @@ async function carregarPets() {
   const container = document.getElementById('pets-container');
 
   try {
-    const response = await fetch('https://amigopet-1.onrender.com/pet/all');
+    const response = await fetch('https://amigopet.onrender.com/pet/all');
     if (!response.ok) throw new Error(`HTTP ${response.status} - ${response.statusText}`);
 
     const data = await response.json();
@@ -249,7 +249,7 @@ Object.keys(rawData).forEach(key => {
 // Adiciona filtro fixo para pets NÃO adotados
 petData.adotado = false;
   try {
-    const response = await fetch("https://amigopet-1.onrender.com/search", {
+    const response = await fetch("https://amigopet.onrender.com/search", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
