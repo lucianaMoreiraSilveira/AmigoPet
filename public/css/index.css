@@ -1,120 +1,106 @@
-/* 🌈 Fundo geral */
+/* Fundo geral da página */
 body.fundo {
-  background: linear-gradient(135deg, #fceabb, #f8b500, #ff6f61, #ffcc70);
-  background-size: 300% 300%;
-  animation: gradientBG 10s ease infinite;
+  background: linear-gradient(135deg, #fdfbfb, #ebedee);
+  font-family: "Poppins", sans-serif;
+  color: #333;
 }
 
-/* Animação do fundo */
-@keyframes gradientBG {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
-
-/* 🌟 Navbar */
+/* Navbar colorida */
 .navbar {
-  background: linear-gradient(90deg, #ff7eb9, #ff65a3, #7afcff);
-  border-radius: 0 0 20px 20px;
+  background: linear-gradient(90deg, #ffb347, #ffcc33, #90ee90) !important;
+}
+
+.navbar-brand span {
+  color: #ff4081 !important;
 }
 
 .nav-link {
   transition: all 0.3s ease;
 }
+
 .nav-link:hover {
-  color: #fff !important;
-  transform: scale(1.1);
-}
-
-/* 🎴 Estilo dos Cards */
-.pet-card {
-  border: none;
-  border-radius: 20px;
-  overflow: hidden;
-  background: #fff;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-  transition: transform 0.3s, box-shadow 0.3s;
-}
-.pet-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 12px 30px rgba(0,0,0,0.2);
-}
-
-/* Imagem dentro do card */
-.pet-card img {
-  height: 180px;
-  object-fit: cover;
-  border-bottom: 5px solid #ff6f61;
+  color: #ff4081 !important;
+  transform: scale(1.05);
 }
 
 /* Botões */
-.btn-success, .btn-primary, .btn-warning {
-  border-radius: 30px;
-  font-weight: bold;
-  transition: all 0.3s ease;
+.btn-primary {
+  background: linear-gradient(135deg, #6a5acd, #9370db);
+  border: none;
 }
-.btn-success:hover, .btn-primary:hover, .btn-warning:hover {
+
+.btn-primary:hover {
+  background: linear-gradient(135deg, #9370db, #ba55d3);
   transform: scale(1.05);
-  box-shadow: 0px 4px 15px rgba(0,0,0,0.3);
 }
 
-/* === Carrossel de notícias === */
+.btn-outline-primary {
+  border-color: #ff69b4;
+  color: #ff69b4;
+}
+
+.btn-outline-primary:hover {
+  background: #ff69b4;
+  color: white;
+}
+
 /* Carrossel */
-#newsCarousel {
-  padding: 50px 15px;
-  border-radius: 15px;
-  overflow: hidden;
-}
-
-.carousel-item img {
-  width: 100%;
-  height: auto; /* responsivo */
-  object-fit: cover; 
-}
-
-.carousel-item .card-img-overlay {
-  background: transparent !important; /* remove qualquer fundo escuro */
-  padding: 1rem;
-  border-radius: 0 0 15px 15px;
-}
-
-.carousel-item .card-title,
-.carousel-item .card-text {
-  color: #000 !important; /* texto escuro */
-  text-shadow: none !important; /* remove sombra preta */
-}
-
-@media (max-width: 768px) {
-  #newsCarousel {
-    padding: 20px 5px;
-  }
-
-  .carousel-item .card-title,
-  .carousel-item .card-text {
-    font-size: 0.9rem;
-  }
-}
-
-
-/* 🔎 Formulário de busca */
-#searchForm {
+.carousel-inner img {
   border-radius: 20px;
+  box-shadow: 0px 4px 15px rgba(0,0,0,0.2);
+}
+
+/* Banner de busca */
+.bannerAnimaisCidade {
+  background: linear-gradient(90deg, #ff9a9e, #fad0c4);
+  padding: 25px;
+  text-align: center;
+  border-radius: 15px;
+  margin-bottom: 30px;
+  box-shadow: 0px 4px 15px rgba(0,0,0,0.2);
+}
+
+/* Formulário de busca */
+#searchForm {
+  background: linear-gradient(90deg, #a1c4fd, #c2e9fb);
   padding: 20px;
-  background: linear-gradient(135deg, #a1ffce, #faffd1);
-  box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+  border-radius: 15px;
+  box-shadow: 0px 4px 15px rgba(0,0,0,0.2);
+}
+
+#searchForm input, 
+#searchForm select {
+  border-radius: 10px;
+}
+
+/* Cards dos pets */
+#petResults .card {
+  border-radius: 20px;
+  transition: all 0.3s ease;
+  background: #fff5f5;
+  box-shadow: 0px 4px 12px rgba(0,0,0,0.1);
+}
+
+#petResults .card:hover {
+  transform: translateY(-5px);
+  background: #fdfd96;
 }
 
 /* Rodapé */
-.footer {
-  background: linear-gradient(90deg, #ff9a9e, #fad0c4, #fad0c4);
-  border-radius: 30px 30px 0 0;
-}
-.footer h5 {
+footer {
+  background: linear-gradient(135deg, #90ee90, #fdfd96, #ffb347);
   color: #333;
+  border-top: 4px solid #ff69b4;
 }
-.footer a {
-  transition: transform 0.3s ease;
+
+footer h5 {
+  color: #ff4081;
 }
-.footer a:hover {
+
+footer a {
+  transition: transform 0.2s ease;
+}
+
+footer a:hover {
   transform: scale(1.2);
 }

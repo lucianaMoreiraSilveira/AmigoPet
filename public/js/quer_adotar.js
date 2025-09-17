@@ -192,18 +192,14 @@ document.addEventListener("click", function (e) {
   if (e.target && e.target.classList.contains("add-to-cart")) {
     const button = e.target;
 
-    const specieMap = { G: 'Gato', C: 'Cachorro' };
-    const sexMap = { M: 'Macho', F: 'Fêmea' };
-    const sizeMap = { P: 'Pequeno', M: 'Médio', G: 'Grande' };
-
     const pet = {
       id: parseInt(button.dataset.id),
       name: button.dataset.name,
       image: button.dataset.image,
-      especie: specieMap[button.dataset.specie] || button.dataset.specie,
-      sexo: sexMap[button.dataset.sex] || button.dataset.sex,
-      idade: button.dataset.age,
-      porte: sizeMap[button.dataset.size] || button.dataset.size,
+      specie: button.dataset.specie, // API usa "specie"
+      sex: button.dataset.sex,       // API usa "sex"
+      age: button.dataset.age,       // API usa "age"
+      size: button.dataset.size      // API usa "size"
     };
 
     let cart = getCart();
