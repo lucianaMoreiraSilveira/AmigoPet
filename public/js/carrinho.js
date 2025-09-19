@@ -1,4 +1,28 @@
+let allPets = [];
 
+/* ============================================================
+   🔑 Funções de Carrinho (com token por usuário)
+============================================================ */
+function getCartKey() {
+  const token = localStorage.getItem('token');
+  if (!token) return 'cart_guest';
+
+  try {
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    const userId = payload.user_id || payload.id || payload.sub || null;
+    return userId ? `cart_${userId}` : 'cart_guest';
+  } catch (e) {
+    console.error('Erro ao decodificar token:', e);
+    return 'cart_guest';
+  }
+}
+function getCart() {
+  return JSON.parse(localStorage.getItem(getCartKey())) || [];
+}
+
+function setCart(cart) {
+  localStorage.setItem(getCartKey(), JSON.stringify(cart));
+}
 
 /* ============================================================
    🐾 Buscar Pets da API
@@ -64,6 +88,7 @@ function displayCartItems() {
     container.appendChild(col);
   });
 }
+
 function removeFromCart(petId) {
   let cart = getCart().filter(pet => pet.id !== petId);
   setCart(cart);
@@ -74,7 +99,8 @@ function removeFromCart(petId) {
 
 function updateCartCount() {
   const cart = getCart();
-  document.getElementById("cartCount").textContent = cart.length;
+  const el = document.getElementById("cartCount");
+  if (el) el.textContent = cart.length;
 }
 
 /* ============================================================
@@ -84,7 +110,7 @@ function showPetModal(pet) {
   const specieMap = { G: 'Gato', C: 'Cachorro' };
   const sexMap = { M: 'Macho', F: 'Fêmea' };
   const sizeMap = { P: 'Pequeno', M: 'Médio', G: 'Grande' };
-  const imagePath = pet.image ? `images/${pet.image.split('/').pop()}` : 'imgs/pet-placeholder.jpg';
+  const imagePath = pet.image ? pet.image : 'imgs/pet-placeholder.jpg';
 
   const modalHTML = `
     <div class="modal fade" id="petDetailModal" tabindex="-1">
@@ -100,10 +126,18 @@ function showPetModal(pet) {
                 <img src="${imagePath}" class="img-fluid rounded" alt="${pet.name}">
               </div>
               <div class="col-md-7">
-                <p><strong>Espécie:</strong> ${specieMap[pet.specie] || pet.specie}</p>
-                <p><strong>Sexo:</strong> ${sexMap[pet.sex] || pet.sex}</p>
+                <p><strong>Espécie:</strong> ${specieMap[pet.specie]}</p>
+                <p><strong>Sexo:</strong> ${sexMap[pet.sex]}</p>
                 <p><strong>Idade:</strong> ${pet.age} anos</p>
-                <p><strong>Porte:</strong> ${sizeMap[pet.size] || pet.size}</p>
+                <p><strong>Porte:</strong> ${sizeMap[pet.size]}</p>
+                <p><strong>Local:</strong> ${pet.city_id || ''}, ${pet.state_id || ''}</p>
+                <p><strong>Descrição:</strong> ${pet.description || ''}</p>
+                <p><strong>Castrado:</strong> ${pet.castrated ? 'Sim' : 'Não'}</p>
+                <p><strong>Vacinado:</strong> ${pet.vaccinated ? 'Sim' : 'Não'}</p>
+                <p><strong>Comportamento:</strong> 
+                  ${pet.docile ? 'Dócil, ' : ''}${pet.aggressive ? 'Agressivo, ' : ''}
+                  ${pet.calm ? 'Calmo, ' : ''}${pet.playful ? 'Brincalhão, ' : ''}
+                </p>
               </div>
             </div>
           </div>
@@ -117,6 +151,7 @@ function showPetModal(pet) {
   document.body.insertAdjacentHTML('beforeend', modalHTML);
   new bootstrap.Modal(document.getElementById("petDetailModal")).show();
 }
+
 function showAdoptionModal(pet) {
   if (!document.getElementById("adoptModal")) {
     const modalHTML = `
@@ -140,13 +175,11 @@ function showAdoptionModal(pet) {
   document.getElementById("adoptMessage").innerHTML =
     `Estamos felizes por você escolher o pet <strong>${pet.name}</strong> para fazer parte da sua vida!`;
 
-  // Atualiza o botão de contato com o ID do pet
   const contactBtn = document.getElementById("contactTutorBtn");
   contactBtn.setAttribute("data-id", pet.id);
 
   new bootstrap.Modal(document.getElementById("adoptModal")).show();
 }
-
 
 /* ============================================================
    📲 Contato via WhatsApp
@@ -220,7 +253,6 @@ document.addEventListener('click', async (e) => {
   }
 });
 
-
 /* ============================================================
    📌 Menu - Redirecionamentos com Token
 ============================================================ */
@@ -262,7 +294,7 @@ document.addEventListener('click', async (e) => {
       window.open(`https://wa.me/${phone}`, '_blank');
     } catch (error) {
       console.error(error);
-      alert('Voce será direcionado ao whatsapp do tutor.');
+      alert('Você será direcionado ao whatsapp do tutor.');
     }
   }
 });

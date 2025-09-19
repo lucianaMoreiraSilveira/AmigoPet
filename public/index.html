@@ -68,54 +68,43 @@
       </div>
     </div>
   </nav>
-  
 
- <nav>
-    
-    <!-- ✅ Carrossel com tempo de transição de 7 segundos -->
-    <div id="newsCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="2000">
-      <div class="carousel-inner" id="carousel-news">
-        <!-- Itens do carrossel serão inseridos aqui via JS -->
-      </div>
-      <button class="carousel-control-prev" type="button" data-bs-target="#newsCarousel" data-bs-slide="prev">
-        <span class="carousel-control-prev-icon"></span>
-      </button>
-      <button class="carousel-control-next" type="button" data-bs-target="#newsCarousel" data-bs-slide="next">
-        <span class="carousel-control-next-icon"></span>
-      </button>
-    </div>
-  </div>
-  </nav>
-
-   
-
-
-<a id="fotoBanner" title="Que tal adotar um pet?" href="/adocao-de-animais/sao-paulo-sp">
-    <source media="(max-width: 300px)" width="300px" height="130px" srcset="/imagens/bannerHomeAdotarMovel.webp">
-    <picture>
-        
-      <img class="d-block w-100" src="images/banner pet2.png" alt="...">
-    </picture>
-</a>
-
-
-</div>
-
-<div id="pets-container" class="row"></div>
-
-
-<main class="container my-5">
-  <div class="bannerAnimaisCidade" fetchpriority="high">
+    <div class="bannerAnimaisCidade" fetchpriority="high">
 
 
        <span style="color: white; font-size: 26px;">
-      Aqui você poderá <b>buscar</b> de acordo com sua preferência!
+      Aqui você vai <b>conhecer</b> alguns dos nossos Pets!
     </span>
-        <br>
-        <a class="btn btn-warning btn-laranja" href="register.html">Faça seu cadastro e adote um amigo!</a> 
+      </div>
+  <div id="pets-container" class="row"></div>
 
+<
+<div class="container my-4">
+  <div class="row g-3"> <!-- g-3 adiciona espaçamento entre banners -->
+
+    <!-- Banner 1 -->
+    <div class="col-12 col-md-6">
+      <a id="fotoBanner" title="Que tal adotar um pet?" href="">
+        <picture>
+          <source media="(max-width: 300px)" srcset="/imagens/bannerHomeAdotarMovel.webp">
+          <img class="img-fluid rounded shadow" src="images/banner pet2.png" alt="Banner Adote um pet">
+        </picture>
+      </a>
+    </div>
+
+    <!-- Banner 2 (exemplo do "faça seu cadastro") -->
+    <div class="col-12 col-md-6 d-flex flex-column align-items-center justify-content-center text-center bg-dark p-4 rounded shadow">
+      <span class="text-white fs-4 mb-3">
+        Aqui você poderá <b>buscar</b> de acordo com sua preferência!
+      </span>
+      <a class="btn btn-warning btn-lg" href="register.html">Faça seu cadastro e adote um amigo!</a>
+    </div>
+
+  </div>
+</div>
 
         </div>
+        <div id="pets-container" class="row"></div>
   <!-- Formulário de busca -->
   <form id="searchForm" class="row g-3" style="background-color: #a5eca5";>
     <div class="col-md-4">
@@ -151,11 +140,15 @@
     </div>
   </form>
   </main>
-  <!-- Resultados da busca --><div id="petResults" class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-5 g-4" style="background-color: #a5eca5";></div>
+<div id="petResults" 
+     class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4" 
+     style="background-color: #a5eca5;">
+</div>
 
-
-
-
+<h2 class="mb-4 text-center">Últimas Notícias</h2>
+<div id="cards-container" class="row g-4">
+  <!-- os cards serão carregados via JS -->
+</div>
   <!-- Rodapé -->
    
   <footer class="footer pt-5 pb-4 mt-5 border-top shadow-sm">

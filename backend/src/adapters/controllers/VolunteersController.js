@@ -1,10 +1,10 @@
-const database = require("../../frameworks/PgDatabase");
+const supabase = require("../../frameworks/supabaseClient");
 const VolunteersService = require("../../services/VolunteersService");
 const VolunteersRepository = require("../repositories/VolunteersRepository");
 const jwt = require("jsonwebtoken");
 
 // Instância única (correta)
-const volunteersRepository = new VolunteersRepository(database);
+const volunteersRepository = new VolunteersRepository(supabase);
 const volunteersService = new VolunteersService(volunteersRepository);
 
 // GET: Retorna todos os voluntários

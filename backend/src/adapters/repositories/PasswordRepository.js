@@ -6,47 +6,38 @@ class PasswordRepository {
       .from("users")
       .select("*")
       .eq("email", email)
-      .maybeSingle(); // não gera erro se não achar nada
+      .maybeSingle();
 
-    if (error) {
-      console.error("Erro em findByEmail:", error);
-      return { error: error.message };
-    }
-    return data;
+    if (error) throw new Error(error.message);
+    return data || null;
   }
 
   async findByResetToken(token) {
-  const now = new Date().toISOString();
-  const { data, error } = await supabase
-    .from("users")
-    .select("*")
-    .eq("reset_token", token)
-    .gt("reset_token_expires", now)
-    .maybeSingle();
+    const now = new Date().toISOString();
+    const { data, error } = await supabase
+      .from("users")
+      .select("*")
+      .eq("reset_token", token)
+      .gt("reset_token_expires", now)
+      .maybeSingle();
 
-  if (error) {
-    console.error("Erro em findByResetToken:", error);
-    return { error: error.message };
+    if (error) throw new Error(error.message);
+    return data || null;
   }
-  return data;
-}
+
   async updateUser(user) {
     const { error } = await supabase
       .from("users")
       .update({
-        password: user.password,
+        password: user.password, // hash antes de chamar
         reset_token: user.reset_token,
         reset_token_expires: user.reset_token_expires,
       })
       .eq("id", user.id);
 
-    if (error) {
-      console.error("Erro em updateUser:", error);
-      return { error: error.message };
-    }
+    if (error) throw new Error(error.message);
     return { success: true };
   }
 }
-
 
 module.exports = PasswordRepository;

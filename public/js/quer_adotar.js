@@ -155,8 +155,16 @@ petData.adotado = false;
 
 function getCartKey() {
   const token = localStorage.getItem('token');
-  const userId = getUserIdFromToken(token);
-  return userId ? `cart_${userId}` : 'cart_guest';
+  if (!token) return 'cart_guest';
+
+  try {
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    const userId = payload.user_id || payload.id || payload.sub || null;
+    return userId ? `cart_${userId}` : 'cart_guest';
+  } catch (e) {
+    console.error('Erro ao decodificar token:', e);
+    return 'cart_guest';
+  }
 }
 
 

@@ -102,3 +102,13 @@ h2 {
 .footer a:hover {
   transform: scale(1.2);
 }
+
+/* Banner de busca */
+.bannerAnimaisCidade {
+  background: linear-gradient(90deg, #ff9a9e, #fad0c4);
+  padding: 25px;
+  text-align: center;
+  border-radius: 15px;
+  margin-bottom: 30px;
+  box-shadow: 0px 4px 15px rgba(0,0,0,0.2);
+}

@@ -59,97 +59,56 @@ function configurarMenuCadastrarPet() {
   }
 }
 
-// ==========================
-// 4. Carrossel de Notícias
-// ==========================
-function carregarNoticias() {
-  const noticias = [
-    {
-      titulo: "Projeto na Alece prevê microchips para identificar cães e gatos e mutirões de castração",
-      descricao: "Inicialmente, programa será voltado para animais em situação de rua ou sob tutela de pessoas em vulnerabilidade social.",
-      imagem: "images/cadastro.jpg",
-      link: "https://diariodonordeste.verdesmares.com.br/pontopoder/projeto-na-alece-preve-microchips-para-identificar-caes-e-gatos-e-mutiroes-de-castracao-1.3646111/"
-    },
-    {
-      titulo: "Secretaria de Saúde de Jaguaruana promove Dia D Antirrábica dos Pets",
-      descricao: "Vacinação em diversos pontos por toda a cidade. Veja como foi este dia.",
-      imagem: "images/buceta-marrom-apos-cirurgia-injecao-para-um-animal-veterinario-de-luvas-com-uma-injecao (1).jpg",
-      link: "https://www.jaguaruana.ce.gov.br/informa/3293/secretaria-de-sa-de-da-prefeitura-de-jaguaruana-pr"
-    },
-    {
-      titulo: "Pet Móvel Ceará",
-      descricao: "Pet Móvel Ceará realizou 1.000 castrações em poucos dias de funcionamento!",
-      imagem: "images/Pet-Ceara-Movel-696x464.jpeg",
-      link: "https://oestadoce.com.br/ceara/pet-movel-ceara-realizou-1-000-castracoes-em-poucos-dias-de-funcionamento/"
-    },
-    {
-      titulo: "Sana 2025",
-      descricao: "59 cães e gatos adotados no Maior Evento de Adoção do Ceará!",
-      imagem: "images/pet-696x435.png",
-      link: "https://www.ceara.gov.br/2025/02/25/22-animais-foram-adotados-na-i-feira-de-adocao-de-animais-da-arena-castelao/"
-    }
-  ];
-
-  const carouselInner = document.getElementById('carousel-news');
-
-  noticias.forEach((noticia, index) => {
-    const itemDiv = document.createElement('div');
-    itemDiv.className = 'carousel-item' + (index === 0 ? ' active' : '');
-
-    itemDiv.innerHTML = `
-      <img src="${noticia.imagem}" class="d-block w-100" alt="${noticia.titulo}" style="max-height: 1600px; object-fit: cover;" />
-      <div class="card-img-overlay d-flex flex-column justify-content-end">
-  <h5 class="card-title">${noticia.titulo}</h5>
-  <p class="card-text">${noticia.descricao}</p>
-  <a href="${noticia.link}" target="_blank" class="btn btn-primary mt-2">Saiba mais</a>
-</div>
-    `;
-
-    carouselInner.appendChild(itemDiv);
-  });
-}
-
-
-//noticias
 async function carregarNoticias() {
+  const container = document.getElementById("cards-container");
+  container.innerHTML = `<div class="text-center p-4">Carregando notícias...</div>`;
+
   try {
     const response = await fetch("https://amigopet.onrender.com/noticias/all");
     if (!response.ok) throw new Error("Falha ao buscar notícias");
-
     const data = await response.json();
-    const noticias = data.noticias; // ✅ acessar a propriedade 'noticias'
-    
-    const carousel = document.getElementById("carousel-news");
-    carousel.innerHTML = ""; // limpa antes de renderizar
+    const noticias = data.noticias || data;
+
+    container.innerHTML = ""; // limpa antes de adicionar os cards
 
     if (!noticias || noticias.length === 0) {
-      carousel.innerHTML = `<div class="text-center p-4">Nenhuma notícia cadastrada.</div>`;
+      container.innerHTML = `<div class="text-center p-4">Nenhuma notícia cadastrada.</div>`;
       return;
     }
 
-    noticias.forEach((noticia, index) => {
-      const ativo = index === 0 ? "active" : "";
-      carousel.innerHTML += `
-        <div class="carousel-item ${ativo}">
-          <img src="${noticia.imagem || "https://amigopet.onrender.com/600x400"}" 
-               class="d-block w-100" 
-               alt="${noticia.titulo}">
-          <div class="carousel-caption d-none d-md-block bg-dark bg-opacity-50 rounded p-2">
-            <h5>${noticia.titulo}</h5>
-            <p>${noticia.descricao || ""}</p>
-            ${noticia.link ? `<a href="${noticia.link}" target="_blank" class="btn btn-light btn-sm">Leia mais</a>` : ""}
-          </div>
+    noticias.forEach((noticia) => {
+      // Coluna responsiva
+      const col = document.createElement("div");
+      col.className = "col-sm-6 col-md-4 col-lg-3 mb-4 d-flex"; 
+      // sm=2 por linha, md=3 por linha, lg=4 por linha, altura alinhada com d-flex
+
+      const card = document.createElement("div");
+      card.className = "card shadow-lg w-100";
+      card.style.borderRadius = "18px";
+      card.style.overflow = "hidden";
+
+      const imagePath = noticia.imagem || "https://amigopet.onrender.com/600x400";
+
+      card.innerHTML = `
+        <img src="${imagePath}" class="card-img-top" alt="${noticia.titulo}" 
+             style="height: 280px; object-fit: cover;">
+        <div class="card-body text-center p-4">
+          <h4 class="card-title mb-3">${noticia.titulo}</h4>
+          ${noticia.link 
+            ? `<a href="${noticia.link}" target="_blank" class="btn btn-primary btn-lg w-100">Leia mais</a>` 
+            : ""}
         </div>
       `;
+
+      col.appendChild(card);
+      container.appendChild(col);
     });
+
   } catch (error) {
     console.error("Erro ao carregar notícias:", error);
+    container.innerHTML = `<div class="text-center p-4 text-danger">Erro ao carregar notícias.</div>`;
   }
 }
-
-// Chamar logo ao carregar a página
-window.addEventListener("DOMContentLoaded", carregarNoticias);
-
 
 // ==========================
 // 1. Carregar pets disponíveis
@@ -188,33 +147,36 @@ async function carregarPets() {
   cardInner.className = 'card pet-card w-100';
 
 cardInner.innerHTML = `
-  <div class="card h-100 shadow-sm w-100">
-    <img src="${imagePath}" class="card-img-top" alt="${pet.name}" style="height: 150px; object-fit: contain; background-color: #fefefe;">
-    <div class="card-body d-flex flex-column justify-content-between">
-      <h5 class="card-title">${pet.name}</h5>
-      <p class="card-text text-muted">
-        ${specie} • ${sex} • ${pet.age} anos • ${size}
-      </p>
-      <p class="card-text">${pet.description || ''}</p>
-    </div>
-    <div class="card-footer text-muted text-center">
-      ${pet.city_id}, ${pet.state_id}
-      <br />
-      <button class="btn ${isAdotado ? 'btn-danger' : 'btn-success'} add-to-cart rounded-pill px-3"
-        ${isAdotado ? 'disabled' : ''}
-        data-id="${pet.id}"
-        data-name="${pet.name}"
-        data-image="${imagePath}"
-        data-specie="${pet.specie}"
-        data-sex="${pet.sex}"
-        data-age="${pet.age}"
-        data-size="${pet.size}"
-         onclick="window.location.href='login.html'">
-        ${isAdotado ? 'Adotado' : 'Adotar'}
-      </button>
-    </div>
+<div class="card h-100 shadow-sm mx-auto" style="width: 80%; border-radius: 15px; background: linear-gradient(135deg, #90ee90, #fdfd96, #ffb347);">
+  <img src="${imagePath}" class="card-img-top" alt="${pet.name}" style="height: 150px; object-fit: contain; background: white; border-top-left-radius: 15px; border-top-right-radius: 15px;">
+  
+  <div class="card-body d-flex flex-column justify-content-between">
+    <h5 class="card-title">${pet.name}</h5>
+    <p class="card-text text-muted">
+      ${specie} • ${sex} • ${pet.age} anos • ${size}
+    </p>
+    <p class="card-text">${pet.description || ''}</p>
   </div>
+  
+  <div class="card-footer text-muted text-center" style="border-bottom-left-radius: 15px; border-bottom-right-radius: 15px;">
+    ${pet.city_id}, ${pet.state_id} <br />
+    <button class="btn ${isAdotado ? 'btn-danger' : 'btn-success'} add-to-cart rounded-pill px-3"
+      ${isAdotado ? 'disabled' : ''}
+      data-id="${pet.id}"
+      data-name="${pet.name}"
+      data-image="${imagePath}"
+      data-specie="${pet.specie}"
+      data-sex="${pet.sex}"
+      data-age="${pet.age}"
+      data-size="${pet.size}"
+      onclick="window.location.href='login.html'">
+      ${isAdotado ? 'Adotado' : 'Adotar'}
+    </button>
+  </div>
+</div>
 `;
+
+
   card.appendChild(cardInner);
   container.appendChild(card);
     });
@@ -331,8 +293,13 @@ function displayResults(pets) {
     const imagePath = avatarFilename ? `images/${avatarFilename}` : 'imgs/pet-placeholder.jpg';
 
     card.innerHTML = `
-      <img src="${imagePath}" class="card-img-top" alt="${pet.name}" style="height: 150px; width: 100%; object-fit: contain;">
-      <div class="card-body d-flex flex-column justify-content-between">
+      
+ <img src="${imagePath}" class="card-img-top" alt="${pet.name}" style="height: 150px; object-fit: contain; background: white; border-top-left-radius: 15px; border-top-right-radius: 15px;">
+  
+<div class="card h-100 shadow-sm mx-auto" style="width: 80%; border-radius: 15px; background: linear-gradient(135deg, #90ee90, #fdfd96, #ffb347);">
+ 
+
+
         <h5 class="card-title">${pet.name}</h5>
         <p class="card-text">
           Espécie: ${specieMap[pet.specie] || pet.specie}<br>

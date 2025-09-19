@@ -1,38 +1,52 @@
-// controllers/PasswordController.js
+const supabase = require("../../frameworks/supabaseClient");
+const PasswordRepository = require('../repositories/PasswordRepository');
 const PasswordService = require('../../services/PasswordService');
-const passwordService = new PasswordService();
+
+const passwordRepository = new PasswordRepository(supabase);
+const passwordService = new PasswordService(passwordRepository);
 
 const PasswordController = {
-  // Solicita o envio do email de redefinição de senha
+  // Endpoint público para solicitar redefinição de senha
   async requestReset(req, res) {
     try {
       const { email } = req.body;
+
       if (!email) {
         return res.status(400).json({ error: "O campo 'email' é obrigatório" });
       }
 
-      await passwordService.requestPasswordReset(email);
-      res.status(200).json({ message: "Se o email estiver cadastrado, você receberá um link de recuperação" });
+      // Envia email de redefinição de senha pelo Supabase
+      const { data, error } = await supabase.auth.api.resetPasswordForEmail(email);
+
+      if (error) {
+        return res.status(400).json({ error: error.message });
+      }
+
+      res.status(200).json({ message: "Email de recuperação enviado" });
     } catch (err) {
-      console.error("Erro em requestReset:", err);
-      res.status(500).json({ error: "Erro ao enviar email de recuperação" });
+      res.status(500).json({ error: "Erro interno no servidor" });
     }
   },
 
-  // Redefine a senha usando o token enviado pelo Supabase
+  // Endpoint público para redefinir a senha com token
   async resetPassword(req, res) {
     try {
-      const { password } = req.body;
-      if (!password) {
-        return res.status(400).json({ error: "A nova senha é obrigatória" });
+      const { token, password } = req.body;
+
+      if (!token || !password) {
+        return res.status(400).json({ error: "Token e nova senha são obrigatórios" });
       }
 
-      // O token deve estar configurado no cliente Supabase pelo front-end
-      await passwordService.resetPassword(password);
+      // Atualiza a senha do usuário usando Supabase
+      const { user, error } = await supabase.auth.api.updateUser(token, { password });
+
+      if (error) {
+        return res.status(400).json({ error: error.message });
+      }
+
       res.status(200).json({ message: "Senha redefinida com sucesso" });
     } catch (err) {
-      console.error("Erro em resetPassword:", err);
-      res.status(500).json({ error: "Erro ao redefinir senha" });
+      res.status(500).json({ error: "Erro interno no servidor" });
     }
   }
 };
