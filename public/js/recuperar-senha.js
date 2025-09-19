@@ -5,7 +5,7 @@
       const messageDiv = document.getElementById('message');
       
       try {
-        const response = await fetch('https://amigopet.onrender.com/forgot', {
+        const response = await fetch('https://amigopet.onrender.com/request-reset', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
