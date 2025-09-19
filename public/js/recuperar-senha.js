@@ -1,32 +1,35 @@
- document.getElementById('forgotPasswordForm').addEventListener('submit', async function(e) {
-      e.preventDefault();
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
 
-      const email = document.getElementById('email').value;
-      const messageDiv = document.getElementById('message');
-      
-      try {
-        const response = await fetch('https://amigopet.onrender.com/request-reset', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ email }),
-        });
+  // Inicialize o Supabase
+  const supabaseUrl = 'https://SEU_SUPABASE_URL';
+  const supabaseAnonKey = 'SUA_CHAVE_ANON';
+  const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
-        const data = await response.json();
+  const form = document.getElementById('forgotPasswordForm');
+  const messageDiv = document.getElementById('message');
 
-        if (response.ok) {
-          messageDiv.innerHTML = `<div class="alert alert-success">${data.message}</div>`;
-          localStorage.setItem('emailParaRedefinir', email);
+  form.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    messageDiv.innerHTML = '';
 
-          setTimeout(() => {
-            window.location.href = 'redefinir-senha.html';
-          }, 2000);
-        } else {
-          messageDiv.innerHTML = `<div class="alert alert-danger">${data.error || 'Erro ao enviar e-mail.'}</div>`;
-        }
+    const email = document.getElementById('email').value.trim();
+    if (!email) {
+      messageDiv.innerHTML = `<div class="alert alert-warning">Digite seu e-mail.</div>`;
+      return;
+    }
 
-      } catch (err) {
-        messageDiv.innerHTML = `<div class="alert alert-danger">Erro ao enviar o link de redefinição de senha.</div>`;
+    try {
+      const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: 'https://amigopet.onrender.com/redefinir-senha.html'
+      });
+
+      if (error) {
+        messageDiv.innerHTML = `<div class="alert alert-danger">${error.message}</div>`;
+      } else {
+        messageDiv.innerHTML = `<div class="alert alert-success">E-mail de redefinição enviado! Verifique sua caixa de entrada.</div>`;
       }
-    });
+    } catch (err) {
+      console.error(err);
+      messageDiv.innerHTML = `<div class="alert alert-danger">Erro ao enviar o e-mail.</div>`;
+    }
+  });
