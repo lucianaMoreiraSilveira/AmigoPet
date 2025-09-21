@@ -4,7 +4,10 @@ const cors = require("cors");
 const server = express();
 
 server.use(cors({
-  origin: ["https://amigopet-d0856.web.app"],
+  origin: [
+    "https://amigopet-d0856.web.app",
+    "https://amigopet.onrender.com"
+  ],
   methods: ["GET", "POST", "PUT", "DELETE"],
   credentials: true
 }));

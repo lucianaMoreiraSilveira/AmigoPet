@@ -1,35 +1,29 @@
-import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+document.getElementById('forgotPasswordForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
 
-  // Inicialize o Supabase
-  const supabaseUrl = 'https://SEU_SUPABASE_URL';
-  const supabaseAnonKey = 'SUA_CHAVE_ANON';
-  const supabase = createClient(supabaseUrl, supabaseAnonKey);
-
-  const form = document.getElementById('forgotPasswordForm');
+  const email = document.getElementById('email').value;
   const messageDiv = document.getElementById('message');
 
-  form.addEventListener('submit', async function(e) {
-    e.preventDefault();
-    messageDiv.innerHTML = '';
+  try {
+    const response = await fetch('/api/request-reset', {  // seu endpoint backend
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email })
+    });
 
-    const email = document.getElementById('email').value.trim();
-    if (!email) {
-      messageDiv.innerHTML = `<div class="alert alert-warning">Digite seu e-mail.</div>`;
-      return;
+    const data = await response.json();
+
+    if (response.ok) {
+      messageDiv.innerHTML = `<div class="alert alert-success">${data.message}</div>`;
+      setTimeout(() => {
+        window.location.href = 'redefinir-senha.html';
+      }, 2000);
+    } else {
+      messageDiv.innerHTML = `<div class="alert alert-danger">${data.error}</div>`;
     }
 
-    try {
-      const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: 'https://amigopet.onrender.com/redefinir-senha.html'
-      });
-
-      if (error) {
-        messageDiv.innerHTML = `<div class="alert alert-danger">${error.message}</div>`;
-      } else {
-        messageDiv.innerHTML = `<div class="alert alert-success">E-mail de redefinição enviado! Verifique sua caixa de entrada.</div>`;
-      }
-    } catch (err) {
-      console.error(err);
-      messageDiv.innerHTML = `<div class="alert alert-danger">Erro ao enviar o e-mail.</div>`;
-    }
-  });
+  } catch (err) {
+    messageDiv.innerHTML = `<div class="alert alert-danger">Erro ao enviar email</div>`;
+    console.error(err);
+  }
+});

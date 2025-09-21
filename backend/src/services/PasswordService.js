@@ -55,6 +55,16 @@ class PasswordService {
     console.log(`E-mail de redefinição enviado para ${email}`);
   }
 
+  async  resetPassword(req, res) {
+  try {
+    const { token, newPassword } = req.body;
+    await passwordService.resetPassword(token, newPassword);
+    res.status(200).json({ message: "Senha redefinida com sucesso" });
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+}
+
   async resetPassword(token, newPassword) {
     const user = await this.userRepository.findByResetToken(token);
     if (!user) throw new Error("Token inválido ou expirado");

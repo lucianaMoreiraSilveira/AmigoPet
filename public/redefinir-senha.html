@@ -72,21 +72,29 @@
     </div>
   </nav>
 
-  <div class="container mt-5">
-  <h3>Redefinir Senha</h3>
-  <div id="message"></div>
-  <form id="resetPasswordForm">
-    <!-- Token será preenchido automaticamente -->
-    <input type="hidden" id="token">
-    
-    <div class="mb-3">
-      <label for="newPassword" class="form-label">Nova Senha</label>
-      <input type="password" id="newPassword" class="form-control" placeholder="Digite a nova senha" required>
+  <div class="auth-container">
+  <div class="image-side d-md-block"></div>
+    <div class="form-side">
+      <div class="form-box">
+        <div class="form-title">
+          <i class="bi bi-lock-fill"></i>
+          <h4>Redefinir Senha</h4>
+        </div>
+        <form id="resetPasswordForm">
+          <div class="mb-3">
+            <label for="token" class="form-label">Token</label>
+            <input type="text" class="form-control" id="token" required>
+          </div>
+          <div class="mb-3">
+            <label for="newPassword" class="form-label">Nova Senha</label>
+            <input type="password" class="form-control" id="newPassword" required autocomplete="new-password">
+          </div>
+          <button type="submit" class="btn btn-purple w-100">Redefinir</button>
+          <div id="message" class="mt-3"></div>
+        </form>
+      </div>
     </div>
-
-    <button type="submit" class="btn btn-primary">Redefinir Senha</button>
-  </form>
-</div>
+  </div>
 
  <footer class="footer pt-5 pb-4 mt-5 border-top shadow-sm">
     <div class="container text-center text-md-start">

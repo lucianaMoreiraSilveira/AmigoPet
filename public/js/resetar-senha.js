@@ -1,36 +1,33 @@
- const urlParams = new URLSearchParams(window.location.search);
-  const token = urlParams.get('access_token'); // token enviado pelo Supabase
-  document.getElementById('token').value = token;
-
-  document.getElementById('resetPasswordForm').addEventListener('submit', async function(e) {
+document.getElementById('resetPasswordForm').addEventListener('submit', async function(e) {
     e.preventDefault();
+
+    const token = document.getElementById('token').value.trim();
     const newPassword = document.getElementById('newPassword').value.trim();
     const messageDiv = document.getElementById('message');
 
-    if (!newPassword) {
-      messageDiv.innerHTML = `<div class="alert alert-warning">Digite a nova senha.</div>`;
+    if (!token || !newPassword) {
+      messageDiv.innerHTML = `<div class="alert alert-warning">Preencha todos os campos.</div>`;
       return;
     }
 
     try {
-      const response = await fetch('https://amigopet.onrender.com/reset-password', {
+      const response = await fetch('https://amigopet-1.onrender.com/reset', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ token, password: newPassword })
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ token, password: newPassword }), // <- ALTERADO AQUI
       });
 
       const data = await response.json();
 
       if (response.ok) {
         messageDiv.innerHTML = `<div class="alert alert-success">${data.message}</div>`;
-        setTimeout(() => {
-          window.location.href = 'login.html';
-        }, 2000);
       } else {
         messageDiv.innerHTML = `<div class="alert alert-danger">${data.error || 'Erro na redefinição.'}</div>`;
       }
     } catch (err) {
-      console.error(err);
+      console.error(err); // Para debug
       messageDiv.innerHTML = `<div class="alert alert-danger">Erro ao redefinir a senha.</div>`;
     }
   });
