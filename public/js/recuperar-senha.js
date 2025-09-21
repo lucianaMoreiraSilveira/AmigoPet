@@ -1,29 +1,23 @@
-document.getElementById('forgotPasswordForm').addEventListener('submit', async function(e) {
+document.getElementById('forgotPasswordForm').addEventListener('submit', async (e) => {
   e.preventDefault();
-
   const email = document.getElementById('email').value;
   const messageDiv = document.getElementById('message');
 
   try {
-    const response = await fetch('/api/request-reset', {  // seu endpoint backend
+    const res = await fetch('https://amigopet.onrender.com/request-reset', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email })
     });
+    const data = await res.json();
 
-    const data = await response.json();
-
-    if (response.ok) {
-      messageDiv.innerHTML = `<div class="alert alert-success">${data.message}</div>`;
-      setTimeout(() => {
-        window.location.href = 'redefinir-senha.html';
-      }, 2000);
+    if (res.ok) {
+      messageDiv.innerHTML = `<div style="color:green;">${data.message}</div>`;
     } else {
-      messageDiv.innerHTML = `<div class="alert alert-danger">${data.error}</div>`;
+      messageDiv.innerHTML = `<div style="color:red;">${data.error}</div>`;
     }
-
   } catch (err) {
-    messageDiv.innerHTML = `<div class="alert alert-danger">Erro ao enviar email</div>`;
+    messageDiv.innerHTML = `<div style="color:red;">Erro ao enviar email</div>`;
     console.error(err);
   }
 });

@@ -11,7 +11,7 @@ document.getElementById('resetPasswordForm').addEventListener('submit', async fu
     }
 
     try {
-      const response = await fetch('https://amigopet-1.onrender.com/reset', {
+      const response = await fetch('https://amigopet.onrender.com/reset-password', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

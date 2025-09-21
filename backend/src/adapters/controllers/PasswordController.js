@@ -5,23 +5,23 @@ const PasswordService = require('../../services/PasswordService');
 const passwordRepository = new PasswordRepository(supabase);
 const passwordService = new PasswordService(passwordRepository);
 
-// Endpoint público para solicitar redefinição de senha
+
 async function requestReset(req, res) {
   try {
     const { email } = req.body;
-    console.log("Recebido email:", email);
-
     if (!email) {
       return res.status(400).json({ error: "O campo 'email' é obrigatório" });
     }
 
-   const { data, error } = await supabase.auth.resetPasswordForEmail(email);
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: "https://amigopet.onrender.com/reset"
+    });
+
     if (error) {
       console.error("Erro Supabase:", error);
       return res.status(400).json({ error: error.message });
     }
 
-    console.log("Email enviado com sucesso:", data);
     res.status(200).json({ message: "Email de recuperação enviado" });
   } catch (err) {
     console.error("Erro interno:", err);
@@ -29,17 +29,12 @@ async function requestReset(req, res) {
   }
 }
 
-// Endpoint público para redefinir a senha com token
 async function resetPassword(req, res) {
   try {
-    const { token, password } = req.body;
-
-    if (!token || !password) {
-      return res.status(400).json({ error: "Token e nova senha são obrigatórios" });
-    }
-
-    // Atualiza a senha do usuário usando Supabase
-    const { user, error } = await supabase.auth.api.updateUser(token, { password });
+    const { password } = req.body;
+    // Esse endpoint só funciona depois que o usuário clicou no link enviado pelo Supabase,
+    // que traz o `access_token` na URL. Ele deve ser capturado no frontend.
+    const { error } = await supabase.auth.updateUser({ password });
 
     if (error) {
       return res.status(400).json({ error: error.message });
@@ -51,7 +46,6 @@ async function resetPassword(req, res) {
   }
 }
 
-// Exportando no mesmo padrão do PetController
 module.exports = {
   requestReset,
   resetPassword
