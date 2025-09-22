@@ -161,25 +161,41 @@ async function searchUsersByNome(req, res) {
   try {
     const { nome } = req.body;
 
-    if (!nome) {
-      return res.status(400).json({ error: "O nome é obrigatório" });
+    // Verifica se o nome foi enviado
+    if (!nome || typeof nome !== 'string' || nome.trim() === '') {
+      console.warn("Nome inválido recebido:", nome);
+      return res.status(400).json({ error: "O nome é obrigatório e deve ser uma string não vazia" });
     }
 
-    const users = await userService.searchUsersByNome(nome);
+    console.log("Buscando usuários com nome:", nome);
 
-    if (!users || users.error) {
-      return res.status(404).json({ error: users.error || "Nenhum usuário encontrado" });
+    // Chama o service
+    const users = await userService.searchUsersByNome(nome.trim());
+
+    // Verifica se houve erro no service
+    if (!users) {
+      console.error("O service retornou undefined ou null");
+      return res.status(500).json({ error: "Erro interno: service não retornou dados" });
     }
 
+    if (users.error) {
+      console.error("Erro do Supabase:", users.error);
+      return res.status(500).json({ error: users.error });
+    }
+
+    // Nenhum usuário encontrado
     if (users.length === 0) {
+      console.log("Nenhum usuário encontrado para:", nome);
       return res.status(404).json({ error: "Nenhum usuário encontrado" });
     }
 
+    console.log("Usuários encontrados:", users.length);
     return res.status(200).json(users);
 
   } catch (error) {
+    // Mostra o erro real no console
     console.error("Erro ao buscar usuários por nome:", error);
-    return res.status(500).json({ error: "Erro interno do servidor" });
+    return res.status(500).json({ error: error.message || "Erro interno do servidor" });
   }
 }
 

@@ -86,6 +86,7 @@ return { user };
     };
   }
  async searchUsersByNome(nome) {
+  const { data, error } = await this.supabase
     if (!nome) return []; // se não passar nada, retorna vazio
     try {
       const users = await this.userRepository.findByName(nome);
@@ -94,48 +95,24 @@ return { user };
       console.error("Erro no service searchUsersByNome:", error);
       throw error; // deixa o controller tratar
     }
-  }
+  
+  
  
-  async findById(id) {
-    const { data, error } = await this.supabase
-      .from("users")
-      .select("id, nome, email, role")
-      .eq("id", id)
-      .maybeSingle();
+ async function findByName(nome) {
+  console.log("Supabase client dentro do service:", supabase); // deve mostrar o objeto
+  const { data, error } = await supabase
+    .from('users')
+    .select('*')
+    .ilike('nome', `%${nome}%`);
 
-    if (error) return { error: error.message };
-    return data;
-  }
-
-  async findByName(nome) {
-    if (!nome) return { error: "Nome é obrigatório" };
-
-    const { data, error } = await this.supabase
-      .from("users")
-      .select("id, nome, email, role")
-      .ilike("nome", `%${nome}%`);
-
-    if (error) return { error: error.message };
-    return data;
-  }
-
-  // Método que seu controller chama
-    async findByName(nome) {
-    if (!nome) return { error: "Nome é obrigatório" };
-    const { data, error } = await this.supabase
-      .from("users")
-      .select("id, nome, email, role")
-      .ilike("nome", `%${nome}%`);
-
-    if (error) return { error: error.message };
-    return data;
-  }
-
-  async searchUsersByNome(nome) {
-    return this.findByName(nome);
-  }
+  if (error) return { error: error.message };
+  return data;
+}
+ }
 }
 
+
+ 
 
 
 

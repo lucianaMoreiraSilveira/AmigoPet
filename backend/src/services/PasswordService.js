@@ -1,4 +1,3 @@
-// services/PasswordService.js
 const bcrypt = require("bcryptjs");
 const { v4: uuidv4 } = require("uuid");
 const nodemailer = require("nodemailer");
@@ -15,21 +14,6 @@ class PasswordService {
       }
     });
   }
-  async authenticateUser(email, password) {
-    const user = await this.userRepository.findByEmail(email);
-
-    if (!user || user.error) {
-      throw new Error('Usuário não encontrado');
-    }
-
-    const passwordMatch = await bcrypt.compare(password, user.password);
-    if (!passwordMatch) {
-      throw new Error('Senha incorreta');
-    }
-
-    return user;
-  }
-
 
   async requestPasswordReset(email) {
     const user = await this.userRepository.findByEmail(email);
@@ -37,7 +21,7 @@ class PasswordService {
 
     const token = uuidv4();
     user.reset_token = token;
-    user.reset_token_expires = new Date(Date.now() + 60 * 60 * 1000); // 1 hora
+    user.reset_token_expires = new Date(Date.now() + 60 * 60 * 1000); // expira em 1h
 
     await this.userRepository.updateUser(user);
 
@@ -46,24 +30,16 @@ class PasswordService {
     await this.transporter.sendMail({
       from: process.env.EMAIL_USER,
       to: email,
-      subject: "Redefinição de senha",
-      html: `<p>Você solicitou a redefinição de senha.</p>
-             <p>Clique no link abaixo para redefinir:</p>
-             <a href="${resetUrl}">${resetUrl}</a>`
+      subject: "Redefinição de senha - AmigoPet",
+      html: `
+        <p>Você solicitou a redefinição de senha.</p>
+        <p>Clique no link abaixo para redefinir sua senha. O link é válido por 1 hora:</p>
+        <a href="${resetUrl}">${resetUrl}</a>
+      `
     });
 
     console.log(`E-mail de redefinição enviado para ${email}`);
   }
-
-  async  resetPassword(req, res) {
-  try {
-    const { token, newPassword } = req.body;
-    await passwordService.resetPassword(token, newPassword);
-    res.status(200).json({ message: "Senha redefinida com sucesso" });
-  } catch (err) {
-    res.status(400).json({ error: err.message });
-  }
-}
 
   async resetPassword(token, newPassword) {
     const user = await this.userRepository.findByResetToken(token);
@@ -77,7 +53,5 @@ class PasswordService {
     await this.userRepository.updateUser(user);
   }
 }
-
-
 
 module.exports = PasswordService;

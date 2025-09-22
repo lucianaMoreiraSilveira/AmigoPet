@@ -29,7 +29,7 @@ class PasswordRepository {
     const { error } = await supabase
       .from("users")
       .update({
-        password: user.password, // hash antes de chamar
+        password: user.password, // deve vir já hasheada
         reset_token: user.reset_token,
         reset_token_expires: user.reset_token_expires,
       })
