@@ -33,12 +33,8 @@ async function registerUser(req, res) {
     res.status(500).json({ error: error.message });
   }
 }
-/* 
-  Login user and generate JWT token
-*/
-/* 
-  Login user and generate JWT token
-*/
+
+
 
 async function loginUser(request, reply) {
   const dataLogin = request.body;
@@ -110,37 +106,43 @@ async function updateUser(req, res) {
   const { id } = req.params;
   const { nome, email } = req.body;
 
-  const result = await userService.updateUser(id, { nome, email });
-
-  if (result?.error) {
-    return res.status(500).json({ error: result.error });
+  // Validação antes do update
+  if (!nome || typeof nome !== 'string' || nome.trim() === '') {
+    return res.status(400).json({ error: "O nome é obrigatório e deve ser válido" });
   }
 
- if (!nome) {
-  return res.status(400).json({ error: "O nome é obrigatório" });
-}
+  try {
+    const result = await userService.updateUser(id, { nome, email });
 
+    if (result?.error) {
+      return res.status(500).json({ error: result.error });
+    }
 
-  res.status(200).json({ message: 'Usuário atualizado com sucesso', user: result });
-}
-
-
-
-async function deleteUser(request, reply) {
-  const { id } = request.params;
-
-  
-  
-
-  const result = await userService.deleteUser(id, (id));
-
-  if (result.error) {
-    return reply.status(500).send({ error: result.error });
+    res.status(200).json({ message: 'Usuário atualizado com sucesso', user: result });
+  } catch (error) {
+    console.error("Erro ao atualizar usuário:", error);
+    res.status(500).json({ error: error.message || "Erro interno do servidor" });
   }
-
-  return reply.status(200).send({ message: "Usuário deletado com sucesso" });
 }
 
+
+
+async function deleteUser(req, res) {
+  const { id } = req.params;
+
+  try {
+    const result = await userService.deleteUser(id);
+
+    if (result?.error) {
+      return res.status(500).json({ error: result.error });
+    }
+
+    return res.status(200).json({ message: "Usuário deletado com sucesso" });
+  } catch (error) {
+    console.error("Erro ao deletar usuário:", error);
+    return res.status(500).json({ error: error.message || "Erro interno do servidor" });
+  }
+}
 // Apenas um mock para exemplo, substitua pelo seu service real
 
 
@@ -148,20 +150,32 @@ async function deleteUser(request, reply) {
 
 async function getUserWithAllData(req, res) {
   const { id } = req.params;
-  const userData = await userService.getUserWithAllData(id);
 
-  if (!userData) {
-    return res.status(404).json({ error: 'Usuário não encontrado' });
+  if (!id) {
+    return res.status(400).json({ error: "ID do usuário é obrigatório" });
   }
 
-  res.json(userData);
+  try {
+    const userData = await userService.getUserWithAllData(id);
+
+    if (!userData) {
+      return res.status(404).json({ error: 'Usuário não encontrado' });
+    }
+
+    res.status(200).json({ data: userData });
+  } catch (error) {
+    console.error("Erro ao obter usuário com todos os dados:", error);
+    res.status(500).json({ error: error.message || "Erro interno do servidor" });
+  }
 }
+
+
+
 // Controller: searchUsersByNome
 async function searchUsersByNome(req, res) {
   try {
     const { nome } = req.body;
 
-    // Verifica se o nome foi enviado
     if (!nome || typeof nome !== 'string' || nome.trim() === '') {
       console.warn("Nome inválido recebido:", nome);
       return res.status(400).json({ error: "O nome é obrigatório e deve ser uma string não vazia" });
@@ -169,10 +183,8 @@ async function searchUsersByNome(req, res) {
 
     console.log("Buscando usuários com nome:", nome);
 
-    // Chama o service
     const users = await userService.searchUsersByNome(nome.trim());
 
-    // Verifica se houve erro no service
     if (!users) {
       console.error("O service retornou undefined ou null");
       return res.status(500).json({ error: "Erro interno: service não retornou dados" });
@@ -183,17 +195,15 @@ async function searchUsersByNome(req, res) {
       return res.status(500).json({ error: users.error });
     }
 
-    // Nenhum usuário encontrado
     if (users.length === 0) {
       console.log("Nenhum usuário encontrado para:", nome);
       return res.status(404).json({ error: "Nenhum usuário encontrado" });
     }
 
     console.log("Usuários encontrados:", users.length);
-    return res.status(200).json(users);
+    return res.status(200).json({ data: users });
 
   } catch (error) {
-    // Mostra o erro real no console
     console.error("Erro ao buscar usuários por nome:", error);
     return res.status(500).json({ error: error.message || "Erro interno do servidor" });
   }

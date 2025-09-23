@@ -92,18 +92,19 @@ class UserRepository {
     return data;
   }
 
-  async findByName(nome) {
-    if (!nome) return { error: "Nome é obrigatório" };
+   async findByName(nome) {
+    const { data, error } = await supabase
+      .from('users')
+      .select('*')
+      .ilike('nome', `%${nome}%`);
 
-    const { data, error } = await this.supabase
-      .from("users")
-      .select("id, nome, email, role")
-      .ilike("nome", `%${nome}%`);
+    if (error) {
+      console.error("Erro no Supabase findByName:", error);
+      return { error: error.message };
+    }
 
-    if (error) return { error: error.message };
-    return data;
+    return data || [];
   }
 }
-
 
 module.exports = UserRepository;

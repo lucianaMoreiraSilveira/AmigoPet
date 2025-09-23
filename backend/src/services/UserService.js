@@ -86,15 +86,25 @@ return { user };
     };
   }
  async searchUsersByNome(nome) {
-  const { data, error } = await this.supabase
-    if (!nome) return []; // se não passar nada, retorna vazio
-    try {
-      const users = await this.userRepository.findByName(nome);
-      return users;
-    } catch (error) {
-      console.error("Erro no service searchUsersByNome:", error);
-      throw error; // deixa o controller tratar
+  if (!nome || typeof nome !== 'string') return []; // retorno seguro
+
+  try {
+    // Chama o repository que faz a consulta no Supabase
+    const users = await this.userRepository.findByName(nome);
+
+    // Se houver erro no repository
+    if (users?.error) {
+      console.error("Erro no repository findByName:", users.error);
+      return []; // ou throw new Error(users.error) se quiser tratar no controller
     }
+
+    // Retorna sempre um array (mesmo se vazio)
+    return users || [];
+  } catch (error) {
+    console.error("Erro no service searchUsersByNome:", error);
+    throw error; // o controller vai tratar
+  }
+
   
   
  
