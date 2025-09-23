@@ -150,10 +150,9 @@ async function deleteUser(req, res) {
 
 async function getUserWithAllData(req, res) {
   const { id } = req.params;
-
-  if (!id) {
-    return res.status(400).json({ error: "ID do usuário é obrigatório" });
-  }
+if (!id || !/^\d+$/.test(id)) { // exemplo para IDs numéricos
+  return res.status(400).json({ error: "ID inválido" });
+}
 
   try {
     const userData = await userService.getUserWithAllData(id);

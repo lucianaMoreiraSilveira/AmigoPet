@@ -82,28 +82,49 @@ class UserRepository {
   }
 
   async findById(id) {
-    const { data, error } = await this.supabase
-      .from("users")
-      .select("id, nome, email, role")
-      .eq("id", id)
-      .maybeSingle();
+    if (!supabase) throw new Error("Supabase client não inicializado");
 
-    if (error) return { error: error.message };
-    return data;
-  }
-
-   async findByName(nome) {
     const { data, error } = await supabase
       .from('users')
       .select('*')
-      .ilike('nome', `%${nome}%`);
+      .eq('id', id)
+      .single();
 
     if (error) {
-      console.error("Erro no Supabase findByName:", error);
-      return { error: error.message };
+      console.error("Erro ao buscar usuário por ID:", error);
+      return null;
+    }
+
+    return data || null;
+  }
+
+  async findPostsByUserId(userId) {
+    const { data, error } = await supabase
+      .from('posts')
+      .select('*')
+      .eq('user_id', userId);
+
+    if (error) {
+      console.error("Erro ao buscar posts do usuário:", error);
+      return [];
     }
 
     return data || [];
+  }
+
+  async findSettingsByUserId(userId) {
+    const { data, error } = await supabase
+      .from('settings')
+      .select('*')
+      .eq('user_id', userId)
+      .single();
+
+    if (error) {
+      console.error("Erro ao buscar settings do usuário:", error);
+      return null;
+    }
+
+    return data || null;
   }
 }
 

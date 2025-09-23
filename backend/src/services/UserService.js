@@ -72,19 +72,17 @@ return { user };
     }
   }
 
- async getUserWithAllData(id) {
+async getUserWithAllData(id) {
     const user = await this.userRepository.findById(id);
     if (!user) return null;
 
     const posts = await this.userRepository.findPostsByUserId(id);
     const settings = await this.userRepository.findSettingsByUserId(id);
 
-    return {
-      ...user,
-      posts,
-      settings
-    };
+    return { ...user, posts, settings };
   }
+
+
  async searchUsersByNome(nome) {
   if (!nome || typeof nome !== 'string') return []; // retorno seguro
 
