@@ -3,6 +3,10 @@ const cors = require("cors");
 const path = require('path');
 const server = express();
 
+
+
+server.use(express.static(path.join(__dirname, "public")));
+
 server.use(cors({
   origin: [
     "https://amigopet-d0856.web.app",
