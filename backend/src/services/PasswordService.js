@@ -25,7 +25,8 @@ class PasswordService {
 
     await this.userRepository.updateUser(user);
 
-   const resetUrl = `https://amigopet.onrender.com/redefinir-senha.html?token=${token}`;
+   const resetUrl = `https://amigopet-d0856.web.app/redefinir-senha.html?token=${token}`;
+   
 
     await this.transporter.sendMail({
       from: process.env.EMAIL_USER,
