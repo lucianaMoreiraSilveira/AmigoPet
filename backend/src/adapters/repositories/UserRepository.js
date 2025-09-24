@@ -31,7 +31,7 @@ class UserRepository {
     return data;
   }
 
-  async getUserByEmail(email) {
+    async getUserByEmail(email) {
     const { data, error } = await supabase
       .from("users")
       .select("*")
@@ -47,8 +47,7 @@ class UserRepository {
       .from("users")
       .update({ nome, email })
       .eq("id", id)
-      .select()
-   
+      .select();
 
     if (error) return { error: error.message };
     return data;
@@ -60,7 +59,7 @@ class UserRepository {
     return { success: true };
   }
 
-     async findByEmail(email) {
+  async findByEmail(email) {
     const { data, error } = await supabase
       .from("users")
       .select("*")
@@ -75,8 +74,24 @@ class UserRepository {
     return data;
   }
 
+  async findByName(nome) {
+    const { data, error } = await supabase
+      .from("users")
+      .select("*")
+      .ilike("nome", `%${nome}%`);
+
+    if (error) {
+      console.error("Erro no findByName:", error.message);
+      return { error: error.message };
+    }
+
+    return data;
+  }
+
   async getAllUsers() {
-    const { data, error } = await this.supabase.from("users").select("id, nome, email, role");
+    const { data, error } = await supabase
+      .from("users")
+      .select("id, nome, email, role");
     if (error) return { error: error.message };
     return data;
   }
@@ -85,9 +100,9 @@ class UserRepository {
     if (!supabase) throw new Error("Supabase client não inicializado");
 
     const { data, error } = await supabase
-      .from('users')
-      .select('*')
-      .eq('id', id)
+      .from("users")
+      .select("*")
+      .eq("id", id)
       .single();
 
     if (error) {
@@ -100,9 +115,9 @@ class UserRepository {
 
   async findPostsByUserId(userId) {
     const { data, error } = await supabase
-      .from('posts')
-      .select('*')
-      .eq('user_id', userId);
+      .from("posts")
+      .select("*")
+      .eq("user_id", userId);
 
     if (error) {
       console.error("Erro ao buscar posts do usuário:", error);
@@ -114,9 +129,9 @@ class UserRepository {
 
   async findSettingsByUserId(userId) {
     const { data, error } = await supabase
-      .from('settings')
-      .select('*')
-      .eq('user_id', userId)
+      .from("settings")
+      .select("*")
+      .eq("user_id", userId)
       .single();
 
     if (error) {
@@ -127,5 +142,4 @@ class UserRepository {
     return data || null;
   }
 }
-
 module.exports = UserRepository;
