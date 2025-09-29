@@ -106,22 +106,30 @@ document.addEventListener('DOMContentLoaded', () => {
       console.error(error);
     }
   };
+
+
+
+
+
+
+
+
 // Busca Usuário
+
+
 document.getElementById('searchUserForm').addEventListener('submit', async function(e) {
   e.preventDefault();
   
   const id = document.getElementById('searchId').value.trim();
   const name = document.getElementById('searchName').value.trim();
   const container = document.getElementById('userResults');
-  container.innerHTML = '';
+  container.innerHTML = ''; // limpa antes de exibir resultados
 
   try {
     let res;
     if (id) {
-      // busca por ID
       res = await fetch(`https://amigopet.onrender.com/user/${id}/all`);
     } else if (name) {
-      // busca por nome
       res = await fetch("https://amigopet.onrender.com/user/search", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -135,91 +143,96 @@ document.getElementById('searchUserForm').addEventListener('submit', async funct
     if (!res.ok) throw new Error('Usuário não encontrado');
     const data = await res.json();
 
-    const users = Array.isArray(data) ? data : [data]; 
-    users.forEach(displayUser);
+    // Garantir que sempre seja um array
+    const users = Array.isArray(data) ? data : [data];
+    users.forEach(user => displayUserById(user));
 
   } catch (err) {
     container.innerHTML = `<p class="text-danger">Erro: ${err.message}</p>`;
   }
 });
 
+function displayUserById(user) {
+  const container = document.getElementById('userResults');
 
-  function displayUser(user) {
-    const container = document.getElementById('userResults');
-    container.innerHTML = '';
-
-    const div = document.createElement('div');
-    div.className = 'col-md-6';
-    div.innerHTML = `
-      <div class="user-card">
-        <div class="mb-2">
-          <label>Nome:</label>
-          <input type="text" class="form-control nome" value="${user.nome || ''}">
-        </div>
-        <div class="mb-2">
-          <label>Email:</label>
-          <input type="email" class="form-control email" value="${user.email || ''}">
-        </div>
-        <div class="mb-2">
-          <label>WhatsApp:</label>
-          <input type="text" class="form-control whatsapp" value="${user.whatsapp || ''}">
-        </div>
-        <button class="btn btn-success me-2" onclick="editarUsuario(${user.id}, this)">Salvar</button>
-        <button class="btn btn-danger" onclick="deletarUsuario(${user.id})">Excluir</button>
+  const div = document.createElement('div');
+  div.className = 'col-md-6 mb-3';
+  div.innerHTML = `
+    <div class="user-card card p-3">
+      <div class="mb-2">
+        <label>Nome:</label>
+        <input type="text" class="form-control nome" value="${user.nome || ''}">
       </div>
-    `;
+      <div class="mb-2">
+        <label>Email:</label>
+        <input type="email" class="form-control email" value="${user.email || ''}">
+      </div>
+      <div class="mb-2">
+        <label>WhatsApp:</label>
+        <input type="text" class="form-control whatsapp" value="${user.whatsapp || ''}">
+      </div>
+      <button type="button" class="btn btn-success me-2" onclick="editarUsuario(${user.id}, this)">Editar</button>
+      <button type="button" class="btn btn-danger" onclick="deletarUsuario(${user.id}, this)">Deletar</button>
+    </div>
+  `;
 
-    container.appendChild(div);
+  container.appendChild(div);
+}
+
+// Função para editar usuário
+window.editarUsuario = async function(id, btn) {
+  const card = btn.closest('.user-card');
+  const nome = card.querySelector('.nome').value.trim();
+  const email = card.querySelector('.email').value.trim();
+  const whatsapp = card.querySelector('.whatsapp').value.trim();
+
+  if (!nome) {
+    alert('O nome é obrigatório!');
+    return;
   }
 
-  window.editarUsuario = async function(id, btn) {
-    const card = btn.closest('.user-card');
-    const nome = card.querySelector('.nome').value.trim();
-    const email = card.querySelector('.email').value.trim();
-    const whatsapp = card.querySelector('.whatsapp').value.trim();
+  try {
+    const res = await fetch(`https://amigopet.onrender.com/user/${id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ nome, email, whatsapp })
+    });
 
-    if (!nome) {
-      alert('O nome é obrigatório!');
-      return;
+    if (res.ok) {
+      alert('Usuário atualizado com sucesso!');
+    } else {
+      const data = await res.json();
+      alert('Erro ao atualizar: ' + (data.error || 'Erro desconhecido'));
     }
+  } catch (error) {
+    alert('Erro ao atualizar usuário.');
+    console.error(error);
+  }
+};
 
-    try {
-      const res = await fetch(`https://amigopet.onrender.com/user/${id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ nome, email, whatsapp })
-      });
+// Função para deletar usuário
+window.deletarUsuario = async function(id, btn) {
+  if (!confirm("Tem certeza que deseja deletar este usuário?")) return;
 
-      if (res.ok) {
-        alert('Usuário atualizado com sucesso!');
-      } else {
-        const data = await res.json();
-        alert('Erro ao atualizar: ' + (data.error || 'Erro desconhecido'));
-      }
-    } catch (error) {
-      alert('Erro ao atualizar usuário.');
-      console.error(error);
+  try {
+    const res = await fetch(`https://amigopet.onrender.com/user/${id}`, { method: 'DELETE' });
+
+    if (res.ok) {
+      alert('Usuário deletado com sucesso!');
+      // Remove o card da tela
+      const card = btn.closest('.col-md-6');
+      card.remove();
+    } else {
+      const data = await res.json();
+      alert('Erro ao deletar: ' + (data.error || 'Erro desconhecido'));
     }
+  } catch (error) {
+    alert('Erro ao deletar usuário.');
+    console.error(error);
+  }
   };
 
-  window.deletarUsuario = async function(id) {
-    if (!confirm("Tem certeza que deseja deletar este usuário?")) return;
-
-    try {
-      const res = await fetch(`https://amigopet.onrender.com/user/${id}`, { method: 'DELETE' });
-
-      if (res.ok) {
-        alert('Usuário deletado com sucesso!');
-        document.getElementById('userResults').innerHTML = '';
-      } else {
-        const data = await res.json();
-        alert('Erro ao deletar: ' + (data.error || 'Erro desconhecido'));
-      }
-    } catch (error) {
-      alert('Erro ao deletar usuário.');
-      console.error(error);
-    }
-  };
+  
 });
 // Busca Pet por ID
 document.getElementById('searchPetByIdForm').addEventListener('submit', async function(e) {
