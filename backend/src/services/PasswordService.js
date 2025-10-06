@@ -16,6 +16,7 @@ class PasswordService {
   }
 });
   }
+  
 
   async requestPasswordReset(email) {
     const user = await this.userRepository.findByEmail(email);
