@@ -30,6 +30,7 @@ class PasswordService {
 
    const resetUrl = `https://amigopet-d0856.web.app/redefinir-senha.html?token=${token}`;
    
+   
 
     await this.transporter.sendMail({
       from: process.env.EMAIL_USER,
