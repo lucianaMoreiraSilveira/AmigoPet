@@ -6,17 +6,21 @@ class PasswordService {
   constructor(userRepository) {
     this.userRepository = userRepository;
 
-   this.transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
-  port: 465,
-  secure: true,
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS
+    // ⚠️ Certifique-se de que EMAIL_USER e EMAIL_PASS estão definidos no ambiente
+    if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+      throw new Error("Variáveis de ambiente EMAIL_USER e EMAIL_PASS são obrigatórias");
+    }
+
+    this.transporter = nodemailer.createTransport({
+      host: "smtp.gmail.com",
+      port: 587,
+      secure: true, // usa SSL
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS
+      }
+    });
   }
-});
-  }
-  
 
   async requestPasswordReset(email) {
     const user = await this.userRepository.findByEmail(email);
@@ -28,23 +32,30 @@ class PasswordService {
 
     await this.userRepository.updateUser(user);
 
-   const resetUrl = `https://amigopet-d0856.web.app/redefinir-senha.html?token=${token}`;
-   
-   
+    const resetUrl = `https://amigopet-d0856.web.app/redefinir-senha.html?token=${token}`;
 
-    await this.transporter.sendMail({
-      from: process.env.EMAIL_USER,
-      to: email,
-      subject: "Redefinição de senha - AmigoPet",
-      html: `
-        <p>Você solicitou a redefinição de senha.</p>
-        <p>Clique no link abaixo para redefinir sua senha. O link é válido por 1 hora:</p>
-        <a href="${resetUrl}">${resetUrl}</a>
-      `
-    });
-
-    console.log(`E-mail de redefinição enviado para ${email}`);
+    // Envio de e-mail
+    try {
+      await this.transporter.sendMail({
+        from: `"AmigoPet" <${process.env.EMAIL_USER}>`,
+        to: email,
+        subject: "Redefinição de senha - AmigoPet",
+        html: `
+          <p>Você solicitou a redefinição de senha.</p>
+          <p>Clique no link abaixo para redefinir sua senha. O link é válido por 1 hora:</p>
+          <p><a href="${resetUrl}">${resetUrl}</a></p>
+        `
+      });
+      console.log(`E-mail de redefinição enviado para ${email}`);
+    } catch (err) {
+      console.error("Erro ao enviar e-mail:", err);
+      throw new Error("Não foi possível enviar o e-mail de redefinição de senha");
+    }
   }
+
+
+
+
 
   async resetPassword(token, newPassword) {
     const user = await this.userRepository.findByResetToken(token);
