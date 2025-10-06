@@ -1,12 +1,12 @@
 const express = require("express");
 const cors = require("cors");
-const path = require('path');
+const path = require("path");
 const server = express();
 
+// ✅ 1. Primeiro: habilita JSON
+server.use(express.json());
 
-
-server.use(express.static(path.join(__dirname, "public")));
-
+// ✅ 2. Depois: habilita CORS
 server.use(cors({
   origin: [
     "https://amigopet-d0856.web.app",
@@ -15,6 +15,9 @@ server.use(cors({
   methods: ["GET", "POST", "PUT", "DELETE"],
   credentials: true
 }));
+
+// ✅ 3. Depois: servir arquivos estáticos
+server.use(express.static(path.join(__dirname, "public")));
 
 server.use(express.json());
 
