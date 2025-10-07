@@ -1,7 +1,6 @@
 const bcrypt = require("bcryptjs");
-const { v4: uuidv4 } = require("uuid");
-
 const { Resend } = require("resend");
+const { v4: uuidv4 } = require("uuid");
 
 class PasswordService {
   constructor(userRepository) {
@@ -22,19 +21,19 @@ class PasswordService {
 
     try {
       await this.resend.emails.send({
-        from: "AmigoPet <no-reply@amigopet.com>",
+        from: "AmigoPet <no-reply@resend.dev>",
         to: email,
         subject: "Redefinição de senha - AmigoPet",
         html: `
           <p>Você solicitou a redefinição de senha.</p>
-          <p>Clique no link abaixo para redefinir sua senha. O link é válido por 1 hora:</p>
+          <p>Clique no link abaixo para redefinir sua senha (válido por 1 hora):</p>
           <a href="${resetUrl}">${resetUrl}</a>
-        `
+        `,
       });
-      console.log(`E-mail enviado para ${email}`);
+      console.log(`E-mail de redefinição enviado para ${email}`);
     } catch (err) {
       console.error("Erro ao enviar e-mail:", err);
-      throw new Error("Não foi possível enviar o e-mail de redefinição de senha");
+      throw new Error("Falha ao enviar o e-mail de redefinição");
     }
   }
 
