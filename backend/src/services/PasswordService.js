@@ -1,11 +1,25 @@
 const bcrypt = require("bcryptjs");
-const { Resend } = require("resend");
 const { v4: uuidv4 } = require("uuid");
+const nodemailer = require("nodemailer");
 
 class PasswordService {
   constructor(userRepository) {
     this.userRepository = userRepository;
-    this.resend = new Resend(process.env.RESEND_API_KEY);
+
+    // ⚠️ Certifique-se de que EMAIL_USER e EMAIL_PASS estão definidos no ambiente
+    if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+      throw new Error("Variáveis de ambiente EMAIL_USER e EMAIL_PASS são obrigatórias");
+    }
+
+    this.transporter = nodemailer.createTransport({
+      host: "smtp.gmail.com",
+      port: 465,
+      secure: true, // usa SSL
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS
+      }
+    });
   }
 
   async requestPasswordReset(email) {
@@ -14,28 +28,31 @@ class PasswordService {
 
     const token = uuidv4();
     user.reset_token = token;
-    user.reset_token_expires = new Date(Date.now() + 60 * 60 * 1000);
+    user.reset_token_expires = new Date(Date.now() + 60 * 60 * 1000); // expira em 1h
+
     await this.userRepository.updateUser(user);
 
     const resetUrl = `https://amigopet-d0856.web.app/redefinir-senha.html?token=${token}`;
 
+    // Envio de e-mail
     try {
-      await this.resend.emails.send({
-        from: "AmigoPet <no-reply@resend.dev>",
+      await this.transporter.sendMail({
+        from: `"AmigoPet" <${process.env.EMAIL_USER}>`,
         to: email,
         subject: "Redefinição de senha - AmigoPet",
         html: `
           <p>Você solicitou a redefinição de senha.</p>
-          <p>Clique no link abaixo para redefinir sua senha (válido por 1 hora):</p>
-          <a href="${resetUrl}">${resetUrl}</a>
-        `,
+          <p>Clique no link abaixo para redefinir sua senha. O link é válido por 1 hora:</p>
+          <p><a href="${resetUrl}">${resetUrl}</a></p>
+        `
       });
       console.log(`E-mail de redefinição enviado para ${email}`);
     } catch (err) {
       console.error("Erro ao enviar e-mail:", err);
-      throw new Error("Falha ao enviar o e-mail de redefinição");
+      throw new Error("Não foi possível enviar o e-mail de redefinição de senha");
     }
   }
+
 
 
 
