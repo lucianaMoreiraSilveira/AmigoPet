@@ -20,7 +20,7 @@
           localStorage.setItem('emailParaRedefinir', email);
 
           setTimeout(() => {
-            window.location.href = 'redefinir-senha.html';
+            window.location.href = '/login.html';
           }, 2000);
         } else {
           messageDiv.innerHTML = `<div class="alert alert-danger">${data.error || 'Erro ao enviar e-mail.'}</div>`;

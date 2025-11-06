@@ -61,9 +61,7 @@
         </ul>
   
         <div class="d-flex gap-2">
-          <a class="btn btn-outline-primary rounded-pill px-4 py-2 fw-semibold" href="login.html">
-            <i class="bi bi-box-arrow-in-right me-1"></i>Entrar
-          </a>
+          <a href="#" id="abrirLogin" class="btn btn-primary rounded-pill px-4 py-2 fw-semibold">Entrar</a>
           <a class="btn btn-primary rounded-pill px-4 py-2 fw-semibold" href="register.html">
             <i class="bi bi-person-plus-fill me-1"></i>Cadastre-se
           </a>
@@ -71,6 +69,44 @@
       </div>
     </div>
   </nav>
+  <!-- Modal flutuante -->
+<div id="loginModal" class="modal-overlay">
+  <div class="login-card">
+    <span id="fecharLogin" class="close">&times;</span>
+
+    <!-- ===== TELA LOGIN ===== -->
+    <div id="loginSection">
+      <h3 class="login-title">Faça seu Login</h3>
+      <input type="email" id="loginEmail" class="login-input" placeholder="Email">
+      <input type="password" id="loginPassword" class="login-input" placeholder="Senha">
+
+      <button id="btnLoginModal" class="btn-login">Acessar minha conta</button>
+      <button id="btnForgotPassword" class="btn-secondary">Esqueci senha</button>
+
+      <div class="divider">OU</div>
+      <a href="register.html" class="btn-create" id="btnCadastrar">Cadastrar uma conta</a>
+    </div>
+    <!-- ===== TELA ESQUECI SENHA ===== -->
+    <div id="forgotSection" style="display:none;">
+      <h3 class="login-title">Recuperar Senha</h3>
+      <input type="email" id="forgotEmail" class="login-input" placeholder="Digite seu e-mail">
+      <button id="btnEnviarReset" class="btn-login">Enviar link de redefinição</button>
+      <button id="btnVoltarLogin" class="btn-secondary">Voltar ao Login</button>
+      <div id="messageForgot"></div>
+    </div>
+
+    <!-- ===== TELA REDEFINIR SENHA ===== -->
+    <div id="resetSection" style="display:none;">
+      <h3 class="login-title">Redefinir Senha</h3>
+      <input type="password" id="newPassword" class="login-input" placeholder="Nova senha">
+      <button id="btnRedefinir" class="btn-login">Redefinir</button>
+      <button id="btnVoltarLogin2" class="btn-secondary">Voltar ao Login</button>
+      <div id="messageReset"></div>
+    </div>
+
+  </div>
+</div>
+  
 
 <div class="container py-5" style="background-color: #e6f4ea; border-radius: 12px;">
   <h2 class="mb-4 text-center">Registro de RG para Pets</h2>
