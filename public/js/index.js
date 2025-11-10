@@ -115,6 +115,7 @@ async function carregarNoticias() {
 // ==========================
 async function carregarPets() {
   const container = document.getElementById('pets-container');
+  const btnVerTodos = document.getElementById('btnVerTodos');
   container.innerHTML = `<div class="text-center p-4">Carregando pets...</div>`;
 
   try {
@@ -124,40 +125,75 @@ async function carregarPets() {
     const data = await response.json();
     const pets = data.pet;
 
-    if (!Array.isArray(pets)) throw new Error("A chave 'pet' não contém um array");
+    if (!Array.isArray(pets) || pets.length === 0) {
+      container.innerHTML = `<div class="text-center p-4">Nenhum pet cadastrado.</div>`;
+      if (btnVerTodos) btnVerTodos.style.display = "none";
+      return;
+    }
 
-    const lastPets = pets.slice(-20); // mostra os últimos 20
-    container.innerHTML = '';
+    // Ordena por mais recentes
+    const petsOrdenados = pets.slice().reverse();
 
-    const specieMap = { 'G': 'Gato', 'C': 'Cachorro' };
-    const sizeMap = { 'P': 'Pequeno', 'M': 'Médio', 'G': 'Grande' };
-    const sexMap = { 'M': 'Macho', 'F': 'Fêmea' };
+    // Mostrar inicialmente 5
+    let mostrandoTodos = false;
+    exibirPets(petsOrdenados.slice(0, 5));
 
-    lastPets.forEach(pet => {
-      const specie = specieMap[pet.specie] || 'Desconhecido';
-      const size = sizeMap[pet.size] || 'Desconhecido';
-      const sex = sexMap[pet.sex] || 'Desconhecido';
-      const avatar = pet.avatar ? pet.avatar.split('\\').pop() : null;
-      const imagePath = avatar ? `images/${avatar}` : 'imgs/pet-placeholder.jpg';
+    // Mostra botão apenas se tiver mais de 5
+    if (petsOrdenados.length > 5) {
+      btnVerTodos.style.display = "inline-block";
+    } else {
+      btnVerTodos.style.display = "none";
+    }
 
-      const card = document.createElement('div');
-      card.className = 'pet-card';
+    // Evento do botão
+    btnVerTodos.onclick = () => {
+      mostrandoTodos = !mostrandoTodos;
 
-      card.innerHTML = `
-        <img src="${imagePath}" alt="${pet.name}">
-        <div class="card-body">
-          <h5>${pet.name}</h5>
-          <div class="info">${size} | ${sex} | ${pet.age} ${pet.age === 1 ? 'ano' : 'anos'}</div>
-          <p>${pet.description || ''}</p>
-        </div>
-      `;
+      if (mostrandoTodos) {
+        exibirPets(petsOrdenados);
+        btnVerTodos.textContent = "Ver menos";
+      } else {
+        exibirPets(petsOrdenados.slice(0, 5));
+        btnVerTodos.textContent = "Ver todos";
+      }
+    };
 
-      container.appendChild(card);
-    });
+    // Função auxiliar para renderizar os pets
+    function exibirPets(lista) {
+      container.innerHTML = "";
+
+      const specieMap = { 'G': 'Gato', 'C': 'Cachorro' };
+      const sizeMap = { 'P': 'Pequeno', 'M': 'Médio', 'G': 'Grande' };
+      const sexMap = { 'M': 'Macho', 'F': 'Fêmea' };
+
+      lista.forEach(pet => {
+        const specie = specieMap[pet.specie] || 'Desconhecido';
+        const size = sizeMap[pet.size] || 'Desconhecido';
+        const sex = sexMap[pet.sex] || 'Desconhecido';
+        const avatar = pet.avatar ? pet.avatar.split('\\').pop() : null;
+        const imagePath = avatar ? `images/${avatar}` : 'imgs/pet-placeholder.jpg';
+
+        const col = document.createElement('div');
+        col.className = 'pet-wrapper';
+
+      col.innerHTML = `
+  <div class="pet-card h-100 shadow-sm border-0">
+    <img src="${imagePath}" alt="${pet.name}">
+    <div class="card-body text-center">
+      <h5 class="card-title">${pet.name}</h5>
+      <p class="card-text text-muted mb-2">${size} • ${sex} • ${pet.age} ${pet.age === 1 ? 'ano' : 'anos'}</p>
+      <p class="small">${pet.description || ''}</p>
+    </div>
+  </div>
+`;
+        container.appendChild(col);
+      });
+    }
 
   } catch (error) {
     console.error("Erro ao carregar pets:", error);
     container.innerHTML = `<div class="text-center p-4 text-danger">Erro ao carregar pets.</div>`;
+    if (btnVerTodos) btnVerTodos.style.display = "none";
   }
 }
   updateCartCount(); // Atualiza contagem do carrinho ao carregar a página

@@ -57,6 +57,11 @@
     <i class="bi bi-person-badge text-warning me-1"></i>Criar RG do Pet
   </a>
 </li>
+<li class="nav-item">
+  <a class="nav-link fs-5 text-dark hover-effect" href="vacina.html">
+    <i class="bi bi-person-badge text-warning me-1"></i>Carteira de Vacinas
+  </a>
+</li>
         </ul>
   
         <div class="d-flex gap-2">
@@ -112,73 +117,29 @@
 </div>
 
 
-    <!-- Banner -->
+   <!-- Banner -->
   <div class="bannerAnimais">
     Aqui você vai <b>conhecer</b> alguns dos nossos pets incríveis! 🐶🐱
   </div>
-  <div id="pets-container" class="row"></div>
+  <div id="pets-container" class="d-flex flex-wrap justify-content-center gap-3"></div>
+  <div class="text-center my-4">
+  <button id="btnVerTodos" class="btn btn-primary px-4 py-2 rounded-pill">Ver todos</button>
+</div>
 
 
 <div class="container my-4">
   <div class="row g-3"> <!-- g-3 adiciona espaçamento entre banners -->
 
-    <!-- Banner 1 -->
-    <div class="col-12 col-md-6">
-      <a id="fotoBanner" title="Que tal adotar um pet?" href="">
-        <picture>
-          <source media="(max-width: 300px)" srcset="/imagens/bannerHomeAdotarMovel.webp">
-          <img class="img-fluid rounded shadow" src="images/banner pet2.png" alt="Banner Adote um pet">
-        </picture>
-      </a>
-    </div>
+  
 
-    <!-- Banner 2 (exemplo do "faça seu cadastro") -->
-    <div class="col-12 col-md-6 d-flex flex-column align-items-center justify-content-center text-center bg-dark p-4 rounded shadow">
-      <span class="text-white fs-4 mb-3">
-        Aqui você poderá <b>buscar</b> de acordo com sua preferência!
-      </span>
-      <a class="btn btn-warning btn-lg" href="register.html">Faça seu cadastro e adote um amigo!</a>
-    </div>
-
-  </div>
+    
 </div>
 
         </div>
         <div id="pets-container" class="row"></div>
-  <!-- Formulário de busca -->
-  <form id="searchForm" class="row g-3" style="background-color: #a5eca5";>
-    <div class="col-md-4">
-      <input type="text" id="pet_name" class="form-control" placeholder="Nome do Pet">
-    </div>
-    <div class="col-md-2">
-      <select id="pet_specie" class="form-select">
-        <option selected disabled>Espécie</option>
-        <option>Gato</option>
-        <option>Cachorro</option>
-      </select>
-    </div>
-    <div class="col-md-2">
-      <select id="pet_sex" class="form-select">
-        <option selected disabled>Sexo</option>
-        <option>Macho</option>
-        <option>Fêmea</option>
-      </select>
-    </div>
-    <div class="col-md-2">
-      <input type="number" id="pet_age" class="form-control" placeholder="Idade">
-    </div>
-    <div class="col-md-2">
-      <select id="pet_size" class="form-select">
-        <option selected disabled>Porte</option>
-        <option>Pequeno</option>
-        <option>Médio</option>
-        <option>Grande</option>
-      </select>
-    </div>
-    <div class="col-12">
-      <button type="submit" class="btn btn-primary">Buscar</button>
-    </div>
-  </form>
+  <form id="searchForm" class="row g-3" style="display: none;">
+  ...
+</form>
   </main>
 <div id="petResults" 
      class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4" 

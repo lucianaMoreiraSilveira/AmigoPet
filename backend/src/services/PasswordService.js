@@ -26,7 +26,7 @@ class PasswordService {
 
     try {
       await this.resend.emails.send({
-        from: "AmigoPet <no-reply@resend.dev>", // pode mudar depois para domínio verificado
+        from: "Amigo Pet <amigopet37@gmail.com>", // pode mudar depois para domínio verificado
         to: email,
         subject: "Redefinição de senha - AmigoPet",
         html: `

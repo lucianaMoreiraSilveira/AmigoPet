@@ -15,7 +15,7 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 <!-- Google Font -->
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet"href="css/rg.css">
+  <link rel="stylesheet"href="css/vacina.css">
 <style>
   
 </style>
@@ -42,7 +42,7 @@
         </a>
        </li>
           <li class="nav-item">
-            <a class="nav-link fs-5 text-dark hover-effect" href="Quem-somos.html">
+            <a class="nav-link fs-5 text-dark hover-effect" href="quem-somos.html">
               <i class="bi bi-info-circle-fill text-primary me-1"></i>Quem somos
             </a>
           </li>
@@ -60,7 +60,7 @@
          
         </ul>
   
-       <div class="d-flex gap-2">
+        <div class="d-flex gap-2">
           <a href="#" id="abrirLogin" class="btn btn-primary rounded-pill px-4 py-2 fw-semibold">Entrar</a>
           <a class="btn btn-primary rounded-pill px-4 py-2 fw-semibold" href="register.html">
             <i class="bi bi-person-plus-fill me-1"></i>Cadastre-se
@@ -109,7 +109,7 @@
   
 
 <div class="container py-5" style="background-color: #e6f4ea; border-radius: 12px;">
-  <h2 class="mb-4 text-center">Registro de RG para Pets</h2>
+  <h2 class="mb-4 text-center">Carteira de Vacinação do Pets</h2>
   <form id="petForm">
     <div class="card p-4 shadow-sm" style="background-color: #a5eca5; border-radius: 12px;">
       <div class="row mb-3">
@@ -131,15 +131,14 @@
           <label for="dataNascimento" class="form-label">Data de Nascimento</label>
           <input type="date" class="form-control" id="dataNascimento" required>
         </div>
-        
-         <div class="col-md-4">
-         <label class="form-label">Espécie</label>
-          <select class="form-select" id="especie">
-            <option value="Gato">Gato</option>
-            <option value="Cachorro">Cachorro</option>
-          </select>
-        </div>
-      
+       <div class="col-md-4">
+  <label for="especie" class="form-label">Espécie</label>
+  <select class="form-select" id="especie" required>
+    <option value="" selected disabled>Escolha...</option>
+    <option value="Cachorro">Cachorro</option>
+    <option value="Gato">Gato</option>
+  </select>
+</div>
         <div class="col-md-4">
           <label class="form-label">Sexo</label>
           <select class="form-select" id="sexo">
@@ -168,28 +167,62 @@
         </div>
       </div>
 
-      <div class="mb-3">
-        <label for="observacoes" class="form-label">Observações</label>
-        <textarea id="observacoes" class="form-control" rows="2"></textarea>
-      </div>
+      <!-- VACINAÇÕES -->
+<div class="mb-3">
+  <label class="form-label fs-5 fw-semibold">Vacinações</label>
 
-      <div class="row mb-3">
-        <div class="col-md-6">
-          <label for="castrado" class="form-label">É castrado?</label>
-          <select id="castrado" class="form-select">
-            <option value="Sim">Sim</option>
-            <option value="Não">Não</option>
-          </select>
-        </div>
-        <div class="col-md-6">
-          <label for="vacinado" class="form-label">Está vacinado?</label>
-          <select id="vacinado" class="form-select">
-            <option value="Sim">Sim</option>
-            <option value="Não">Não</option>
-          </select>
-        </div>
-      </div>
+  <!-- Seletor da espécie -->
+  <div class="mb-2">
+    <label class="form-label">Selecione a espécie:</label>
+    <select id="filtroEspecie" class="form-select" onchange="filtrarVacinas()">
+      <option value="Todas">Todas</option>
+      <option value="Cachorro">Cachorro</option>
+      <option value="Gato">Gato</option>
+    </select>
+  </div>
 
+  <!-- Lista dinâmica de vacinas -->
+  <div id="listaVacinas" class="d-flex flex-column gap-2"></div>
+</div>
+<!-- TRATAMENTOS -->
+<div class="row mb-3">
+  <div class="col-md-6">
+    <label for="tratamento" class="form-label">Já passou por algum tratamento?</label>
+    <select id="tratamento" class="form-select" onchange="mostrarCampoTratamento()">
+      <option value="Não">Não</option>
+      <option value="Sim">Sim</option>
+    </select>
+  </div>
+  <div class="col-md-6" id="campoProcedimento" style="display:none;">
+    <label for="tipoTratamento" class="form-label">Tipo de procedimento</label>
+    <input type="text" id="tipoTratamento" class="form-control" placeholder="Descreva o procedimento">
+  </div>
+</div>
+
+<!-- COMPORTAMENTO -->
+<div class="row mb-3">
+  <div class="col-md-6">
+    <label for="sociavel" class="form-label">É sociável?</label>
+    <select id="sociavel" class="form-select">
+      <option value="Sim">Sim</option>
+      <option value="Não">Não</option>
+    </select>
+  </div>
+  <div class="col-md-6">
+    <label for="tipoAmbiente" class="form-label">Pode viver em:</label>
+    <select id="tipoAmbiente" class="form-select">
+      <option value="Apartamento">Apartamento</option>
+      <option value="Casa">Casa</option>
+      <option value="Ambos">Ambos</option>
+    </select>
+  </div>
+</div>
+
+<!-- OBSERVAÇÕES -->
+<div class="mb-3">
+  <label for="observacoes" class="form-label">Observações</label>
+  <textarea id="observacoes" class="form-control" rows="2" placeholder="Informações adicionais sobre o animal"></textarea>
+</div>
       <div class="row mb-3">
         <div class="col-md-6">
           <label for="tutor" class="form-label">Nome do Tutor</label>
@@ -202,7 +235,8 @@
       </div>
 
       <div class="text-center">
-        <button type="submit" class="btn btn-primary px-4">Gerar RG</button>
+       
+         <button type="submit" class="btn btn-primary px-4">Gerar Carteira de vacina</button>
       </div>
     </div>
   </form>
@@ -251,7 +285,8 @@
       </div>
     </div>
   </footer>
-  <script src="js/identidadepet.js"></script>
+  <script src="js/vacina.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
 </body>
 </html>

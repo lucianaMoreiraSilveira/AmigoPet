@@ -1,109 +1,94 @@
-body.fundo {
-  background: linear-gradient(135deg, #fceabb, #f8b500, #ff6f61, #ffcc70);
-  background-size: 300% 300%;
-  animation: gradientBG 10s ease infinite;
+/* quer-ajudar.css */
+
+/* Fundo com gradiente alegre */
+body {
+  background: linear-gradient(135deg, #ecd4b2, #fcb69f, #f6d365, #c2e9fb);
+  background-size: 400% 400%;
+  animation: gradientBG 12s ease infinite;
+  font-family: 'Poppins', sans-serif;
 }
 
-/* Animação do fundo */
+/* Animação do gradiente */
 @keyframes gradientBG {
   0% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
   100% { background-position: 0% 50%; }
 }
 
-/* Navbar */
+/* Título principal */
+.section-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #ff6f61;
+  text-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+}
 
-/* 🌟 Navbar */
+/* Cartões mais divertidos */
+.card {
+  border-radius: 20px;
+  border: none;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+  transform: scale(1.03);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+
+/* Lista de dicas */
+.card ul li::before {
+  content: "🐾 ";
+}
+
+/* Botões */
+.btn.bg-green {
+  background: linear-gradient(90deg, #4caf50, #81c784);
+  color: white;
+  border-radius: 30px;
+  font-weight: 600;
+}
+
+.btn.bg-green:hover {
+  background: linear-gradient(90deg, #388e3c, #66bb6a);
+}
+
+/* QR Code container */
+.qr-code {
+  padding: 15px;
+  border-radius: 20px;
+  background: #fff3e0;
+  display: inline-block;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+/* Navbar */
 .navbar {
-  background: linear-gradient(90deg, #ff7eb9, #ff65a3, #7afcff);
-  border-radius: 0 0 20px 20px;
+  background: #fff;
+  border-bottom: 3px solid #f48fb1;
 }
 
 .nav-link {
-  transition: all 0.3s ease;
+  transition: color 0.3s;
 }
+
 .nav-link:hover {
-  color: #fff !important;
-  transform: scale(1.1);
-}
-
-
-.btn-primary {
-    background: linear-gradient(90deg, #ff6b6b, #f7d794);
-    border: none;
-    transition: transform 0.3s ease;
-}
-.btn-primary:hover {
-    transform: scale(1.05);
-}
-
-/* Main container */
-main {
-    padding: 5rem 1rem 2rem;
-    flex-grow: 1;
-}
-
-/* Form styling */
-form {
-    background: rgba(255, 255, 255, 0.95);
-    border-radius: 20px;
-    padding: 2rem;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-    transition: transform 0.3s ease;
-}
-form:hover {
-    transform: translateY(-5px);
-}
-h2, h5 {
-    color: #ff6b6b;
-}
-
-/* Inputs e selects */
-input.form-control, select.form-control, textarea.form-control {
-    border-radius: 10px;
-    border: 1px solid #ccc;
-    transition: all 0.3s ease;
-}
-input.form-control:focus, select.form-control:focus, textarea.form-control:focus {
-    border-color: #ff6b6b;
-    box-shadow: 0 0 10px rgba(255,107,107,0.3);
-}
-
-/* Checkboxes */
-.form-check-input:checked {
-    background-color: #ff6b6b;
-    border-color: #ff6b6b;
+  color: #ff4081 !important;
 }
 
 /* Footer */
-footer {
-    background: rgba(255,255,255,0.9);
-    padding: 2rem 0;
-    box-shadow: 0 -4px 10px rgba(0,0,0,0.05);
+.footer {
+  background: #ffecb3;
+  border-top-left-radius: 30px;
+  border-top-right-radius: 30px;
 }
 
-/* Hover effects icons sociais */
-footer a:hover {
-    transform: scale(1.2);
-    transition: 0.3s;
+.footer h5 {
+  color: #ff7043;
 }
 
-/* Responsividade */
-@media (max-width: 768px) {
-    form {
-        padding: 1rem;
-    }
+.footer p, .footer a {
+  color: #6d4c41;
 }
-.col-md-6 .p-3 {
-  border-radius: 12px;
-  box-shadow: 0 3px 8px rgba(0,0,0,0.1);
-}
-
-.col-md-6 .p-3 h5 {
-  font-weight: bold;
-  margin-bottom: 10px;
-}
-
 .modal-overlay {
   display: none;
   position: fixed;

@@ -6,6 +6,7 @@ const VolunteersController = require("../adapters/controllers/VolunteersControll
 const PasswordController = require("../adapters/controllers/PasswordController");
 const WhatsappController = require('../adapters/controllers/whatsappController');
 const NoticiasController = require("../adapters/controllers/NoticiasController");
+const VacinaController = require("../adapters/controllers/VacinaController");
 
 
 
@@ -74,7 +75,12 @@ routes.post("/auth/quer_divulgar", Authenticate, UserController.quer_divulgarUse
 routes.post("/auth/quer_adotar", Authenticate, UserController.quer_adotarUser);
 
 
-
+// Todas exigem login
+routes.post("/vacinas", Authenticate, VacinaController.registrar);
+routes.get("/vacinas", Authenticate, VacinaController.listar);
+routes.get("/vacinas/:id", Authenticate, VacinaController.buscarPorId);
+routes.put("/vacinas/:id", Authenticate, VacinaController.atualizar);
+routes.delete("/vacinas/:id", Authenticate, VacinaController.deletar);
 
 
 
