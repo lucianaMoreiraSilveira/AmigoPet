@@ -68,19 +68,19 @@ const payload = {
 
  let redirect = "";
 
-if (replyService.user.role === "admin") {
+if (replyService.user?.role?.toLowerCase() === "admin") {
   redirect = "admin.html";
-} else if (replyService.user.quer_adotar === true) {
+} else if (replyService.user?.quer_adotar == true) { // == para aceitar string ou boolean
   redirect = "quer_adotar.html";
 } else {
   redirect = "quer_divulgar.html";
 }
-  // Verifique se o redirect foi corretamente atribuído
-  if (!redirect) {
-    return reply.status(500).json({ error: "Erro ao definir o redirecionamento." });
-  }
 
-  return reply.status(200).json({ token, redirect });
+if (!redirect) {
+  return reply.status(500).json({ error: "Erro ao definir o redirecionamento." });
+}
+
+return reply.status(200).json({ token, redirect });
 }
 
 

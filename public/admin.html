@@ -112,6 +112,37 @@
   </div>
 </div>
 
+<h1 class="text-center mb-4">🐾 Meus Pets Cadastrados</h1>
+
+    <!-- 🔍 Formulário de busca -->
+    <form id="searchForm" class="row g-3 mb-4">
+      <div class="col-md-4">
+        <input type="text" id="pet_name" class="form-control" placeholder="Nome do pet">
+      </div>
+      <div class="col-md-3">
+        <select id="pet_specie" class="form-select">
+          <option value="">Espécie</option>
+          <option value="C">Cachorro</option>
+          <option value="G">Gato</option>
+        </select>
+      </div>
+      <div class="col-md-3">
+        <select id="pet_sex" class="form-select">
+          <option value="">Sexo</option>
+          <option value="M">Macho</option>
+          <option value="F">Fêmea</option>
+        </select>
+      </div>
+      <div class="col-md-2 d-grid">
+        <button class="btn btn-primary" type="submit">Buscar</button>
+      </div>
+    </form>
+
+    <!-- 🐶 Resultados -->
+    <div id="pets-container" class="row g-4"></div>
+  </div>
+
+
   
  
  <h2>Buscar Usuário</h2>

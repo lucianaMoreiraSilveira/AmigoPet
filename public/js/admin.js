@@ -43,6 +43,162 @@ document.addEventListener('DOMContentLoaded', () => {
         "<div class='col-12 text-danger'>Erro ao buscar pets: " + error.message + "</div>";
     }
   });
+document.addEventListener("DOMContentLoaded", () => {
+  carregarUltimosPets();
+
+  document.getElementById("searchForm").addEventListener("submit", (e) => {
+    e.preventDefault();
+    buscarPets();
+  });
+});
+
+// ==========================
+// 1️⃣ Carregar 5 últimos pets
+// ==========================
+async function carregarUltimosPets() {
+  const container = document.getElementById("pets-container");
+  container.innerHTML = `<div class="text-center p-4">Carregando pets...</div>`;
+
+  try {
+    const res = await fetch("https://amigopet.onrender.com/pet/all");
+    const data = await res.json();
+    const pets = data.pet.slice(-5).reverse(); // últimos 5
+
+    exibirPets(pets);
+  } catch (error) {
+    console.error(error);
+    container.innerHTML = `<div class="text-center text-danger">Erro ao carregar pets.</div>`;
+  }
+}
+
+// ==========================
+// 2️⃣ Buscar pets
+// ==========================
+async function buscarPets() {
+  const nome = document.getElementById("pet_name").value.trim();
+  const especie = document.getElementById("pet_specie").value;
+  const sexo = document.getElementById("pet_sex").value;
+
+  const filtros = {
+    name: nome,
+    specie: especie,
+    sex: sexo,
+    adotado: false
+  };
+
+  try {
+    const res = await fetch("https://amigopet.onrender.com/search", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(filtros),
+    });
+
+    const result = await res.json();
+    exibirPets(result.pet);
+  } catch (error) {
+    console.error(error);
+    document.getElementById("pets-container").innerHTML =
+      `<div class="text-center text-danger">Erro na busca de pets.</div>`;
+  }
+}
+
+// ==========================
+// 3️⃣ Exibir pets com ações
+// ==========================
+function exibirPets(pets) {
+  const container = document.getElementById("pets-container");
+  container.innerHTML = "";
+
+  if (!pets || pets.length === 0) {
+    container.innerHTML = `<div class="text-center text-muted">Nenhum pet encontrado.</div>`;
+    return;
+  }
+
+  pets.forEach((pet) => {
+    const col = document.createElement("div");
+    col.className = "col-sm-6 col-md-4 col-lg-3";
+
+    const imagePath = pet.avatar
+      ? `images/${pet.avatar.split("\\").pop()}`
+      : "imgs/pet-placeholder.jpg";
+
+    col.innerHTML = `
+      <div class="card h-100 shadow-sm border-0">
+        <img src="${imagePath}" class="card-img-top" style="height: 200px; object-fit: cover;">
+        <div class="card-body text-center">
+          <h5 class="card-title">${pet.name}</h5>
+          <p class="text-muted">${pet.age || 0} anos</p>
+          <div class="d-flex justify-content-center gap-2 mt-3">
+            <button class="btn btn-warning btn-sm" onclick="editarPet(${pet.id}, '${pet.name}', '${imagePath}', '${pet.age}')">Editar</button>
+            <button class="btn btn-danger btn-sm" onclick="removerPet(${pet.id})">Remover</button>
+          </div>
+        </div>
+      </div>
+    `;
+
+    container.appendChild(col);
+  });
+}
+
+// ==========================
+// 4️⃣ Editar pet (nome, idade, imagem)
+// ==========================
+async function editarPet(id, nomeAtual, imagemAtual, idadeAtual) {
+  const novoNome = prompt("Novo nome:", nomeAtual);
+  if (novoNome === null) return;
+
+  const novaIdade = prompt("Nova idade:", idadeAtual || 0);
+  if (novaIdade === null) return;
+
+  const novaImagem = prompt("URL da nova imagem (ou deixe em branco):", imagemAtual);
+
+  const data = {
+    name: novoNome,
+    age: parseInt(novaIdade),
+    avatar: novaImagem || imagemAtual,
+  };
+
+  try {
+    const res = await fetch(`https://amigopet.onrender.com/pet/${id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
+
+    if (res.ok) {
+      alert("Pet atualizado com sucesso!");
+      carregarUltimosPets();
+    } else {
+      alert("Erro ao atualizar o pet.");
+    }
+  } catch (error) {
+    console.error(error);
+    alert("Erro na conexão ao atualizar pet.");
+  }
+}
+
+// ==========================
+// 5️⃣ Remover pet
+// ==========================
+async function removerPet(id) {
+  if (!confirm("Tem certeza que deseja remover este pet?")) return;
+
+  try {
+    const res = await fetch(`https://amigopet.onrender.com/pet/${id}`, {
+      method: "DELETE",
+    });
+
+    if (res.ok) {
+      alert("Pet removido com sucesso!");
+      carregarUltimosPets();
+    } else {
+      alert("Erro ao remover pet.");
+    }
+  } catch (error) {
+    console.error(error);
+    alert("Erro na conexão ao remover pet.");
+  }
+}
 
 
 

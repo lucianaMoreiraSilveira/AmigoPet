@@ -514,18 +514,17 @@ btnLoginModal.addEventListener('click', async () => {
     const data = await response.json();
 
     if (response.ok) {
-      // Salva token
-      localStorage.setItem('token', data.token);
+  // Salva token
+  localStorage.setItem('token', data.token);
 
-      alert('Login realizado com sucesso!');
-      loginModal.classList.remove('mostrar');
+  alert('Login realizado com sucesso!');
+  loginModal.classList.remove('mostrar');
 
-      
+  // Pequeno delay para o modal fechar antes do redirecionamento
+  setTimeout(() => {
+    window.location.href = redirect;
+  }, 500);
 
-      // Pequeno delay para o modal fechar antes do redirecionamento
-      setTimeout(() => {
-        window.location.href = redirect;
-      }, 500);
     } else {
       alert(data.error || 'Erro ao fazer login.');
     }
