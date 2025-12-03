@@ -80,8 +80,11 @@ if (!redirect) {
   return reply.status(500).json({ error: "Erro ao definir o redirecionamento." });
 }
 
-return reply.status(200).json({ token, redirect });
-}
+return reply.status(200).json({
+  token,
+  user: user,  // ADICIONAR ISSO!!
+  redirect
+});
 
 
 /* Rotas ainda não implementadas */
@@ -228,4 +231,6 @@ module.exports = {
   searchUsersByNome
   
 
-};
+}
+
+}
